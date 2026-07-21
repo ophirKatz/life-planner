@@ -28,6 +28,7 @@ function RootNavigator() {
       <Stack.Protected guard={!!session}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="modules" />
+        <Stack.Screen name="integrations" options={{ headerShown: true, presentation: "modal" }} />
       </Stack.Protected>
     </Stack>
   );

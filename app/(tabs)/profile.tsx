@@ -1,10 +1,12 @@
-import { Moon, Sun, SunMoon } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { Link2, Moon, Sun, SunMoon } from "lucide-react-native";
 import { Text, View } from "react-native";
 
 import { useSession } from "@/core/auth/session";
 import { Button } from "@/core/ui/Button";
 import { Card } from "@/core/ui/Card";
 import { cn } from "@/core/ui/lib/utils";
+import { ListItem } from "@/core/ui/ListItem";
 import { useTheme, type ThemePreference } from "@/core/ui/theme/useTheme";
 
 const THEME_OPTIONS: { value: ThemePreference; label: string; icon: typeof Sun }[] = [
@@ -14,6 +16,7 @@ const THEME_OPTIONS: { value: ThemePreference; label: string; icon: typeof Sun }
 ];
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const { session, signOut } = useSession();
   const { active, setPreference } = useTheme();
 
@@ -46,6 +49,14 @@ export default function ProfileScreen() {
           })}
         </View>
       </Card>
+
+      <ListItem
+        title="Integrations"
+        subtitle="Connect Google Calendar"
+        icon={Link2}
+        showChevron
+        onPress={() => router.push("/integrations")}
+      />
 
       <Button label="Sign out" variant="secondary" onPress={signOut} className="mt-auto mb-10" />
     </View>
