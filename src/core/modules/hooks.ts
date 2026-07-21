@@ -38,3 +38,11 @@ export function useQuickAddActions(): QuickAddAction[] {
   const enabled = useEnabledModules();
   return useMemo(() => enabled.flatMap((m) => m.quickAddActions), [enabled]);
 }
+
+/** For tab screens that map 1:1 to a module (e.g. the Calendar tab) and need
+ * to show/hide themselves based on enablement, not just their dashboard widget. */
+export function useIsModuleEnabled(slug: string): { isEnabled: boolean; isLoading: boolean } {
+  const { data: userModules, isLoading } = useUserModules();
+  const isEnabled = !!userModules?.some((um) => um.module.slug === slug && um.enabled);
+  return { isEnabled, isLoading };
+}

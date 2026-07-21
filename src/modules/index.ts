@@ -4,12 +4,13 @@
 // DESIGN.md §5.1.
 import { registerLinkable } from "@/core/links/registry";
 import { registerModule } from "@/core/modules/registry";
+import { calendarModule } from "@/modules/calendar/definition";
 import { habitsModule } from "@/modules/habits/definition";
 import { peopleModule } from "@/modules/people/definition";
 import { shoppingModule } from "@/modules/shopping/definition";
 import { tasksModule } from "@/modules/tasks/definition";
 
-const modules = [tasksModule, peopleModule, habitsModule, shoppingModule];
+const modules = [tasksModule, calendarModule, peopleModule, habitsModule, shoppingModule];
 
 modules.forEach((mod) => {
   registerModule(mod);
