@@ -5,10 +5,12 @@ import { PortalHost } from "@rn-primitives/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { SessionProvider, useSession } from "@/core/auth/session";
+import { initPurchases } from "@/core/billing/purchases";
 import { ScheduledAsConfirmDialog } from "@/core/events/ScheduledAsConfirmDialog";
 
 const queryClient = new QueryClient({
@@ -17,6 +19,10 @@ const queryClient = new QueryClient({
 
 function RootNavigator() {
   const { session, isLoading } = useSession();
+
+  useEffect(() => {
+    if (session?.user.id) initPurchases(session.user.id);
+  }, [session?.user.id]);
 
   if (isLoading) return null;
 

@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { Calendar, Trash2 } from "lucide-react-native";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 
+import { presentPaywall } from "@/core/billing/paywall";
 import { useConnectedAccounts, useDisconnectAccount } from "@/core/integrations/data/useConnectedAccounts";
 import { useConnectGoogleCalendar } from "@/core/integrations/useConnectGoogleCalendar";
 import { Button } from "@/core/ui/Button";
@@ -10,7 +11,7 @@ import { ListItem } from "@/core/ui/ListItem";
 
 export default function IntegrationsScreen() {
   const { data: accounts, isLoading } = useConnectedAccounts();
-  const { connect, isConnecting, error } = useConnectGoogleCalendar();
+  const { connect, isConnecting, error, needsUpgrade } = useConnectGoogleCalendar();
   const disconnect = useDisconnectAccount();
 
   return (
@@ -53,11 +54,16 @@ export default function IntegrationsScreen() {
           )}
         </View>
 
-        <Button
-          label="Connect Google Calendar"
-          isLoading={isConnecting}
-          onPress={connect}
-        />
+        <Button label="Connect Google Calendar" isLoading={isConnecting} onPress={connect} />
+
+        {needsUpgrade ? (
+          <View className="gap-2">
+            <Text className="text-sm text-muted-foreground text-center">
+              The free plan includes 1 connected account. Upgrade to Pro to connect more.
+            </Text>
+            <Button label="Upgrade to Pro" onPress={() => presentPaywall()} />
+          </View>
+        ) : null}
 
         {error ? <Text className="text-sm text-danger text-center">{error}</Text> : null}
 

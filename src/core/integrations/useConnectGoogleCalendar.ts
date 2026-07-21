@@ -15,6 +15,22 @@ const discovery: AuthSession.DiscoveryDocument = {
   revocationEndpoint: "https://oauth2.googleapis.com/revoke",
 };
 
+/** supabase-js's FunctionsHttpError.message is a generic "non-2xx status
+ * code" string — the real message our function returned is in the response
+ * body, reachable via `.context`. */
+async function extractFunctionErrorMessage(error: unknown): Promise<string> {
+  if (error && typeof error === "object" && "context" in error) {
+    try {
+      const context = (error as { context: Response }).context;
+      const body = await context.json();
+      if (typeof body?.error === "string") return body.error;
+    } catch {
+      // fall through to the generic message below
+    }
+  }
+  return error instanceof Error ? error.message : "Connection failed.";
+}
+
 /**
  * The *integration* OAuth flow (DESIGN.md §6.3) — distinct from sign-in.
  * Requests offline access + forces the consent screen so Google always
@@ -26,6 +42,7 @@ export function useConnectGoogleCalendar() {
   const queryClient = useQueryClient();
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [needsUpgrade, setNeedsUpgrade] = useState(false);
 
   const redirectUri = useMemo(() => AuthSession.makeRedirectUri({ scheme: "lifeplanner" }), []);
 
@@ -44,6 +61,7 @@ export function useConnectGoogleCalendar() {
 
   const connect = useCallback(async () => {
     setError(null);
+    setNeedsUpgrade(false);
     if (!env.googleOAuthClientId) {
       setError("Google integration is not configured (EXPO_PUBLIC_GOOGLE_OAUTH_CLIENT_ID is empty).");
       return;
@@ -64,7 +82,15 @@ export function useConnectGoogleCalendar() {
           redirectUri,
         },
       });
-      if (invokeError) throw invokeError;
+      if (invokeError) {
+        const message = await extractFunctionErrorMessage(invokeError);
+        if (message.includes("PAYWALL:")) {
+          setNeedsUpgrade(true);
+        } else {
+          setError(message);
+        }
+        return;
+      }
 
       queryClient.invalidateQueries({ queryKey: connectedAccountsKey });
     } catch (e) {
@@ -74,5 +100,5 @@ export function useConnectGoogleCalendar() {
     }
   }, [request, redirectUri, queryClient]);
 
-  return { connect, isConnecting, error };
+  return { connect, isConnecting, error, needsUpgrade };
 }

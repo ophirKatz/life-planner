@@ -1,6 +1,7 @@
 import { AlertCircle, ChevronDown, ChevronUp } from "lucide-react-native";
 import { Pressable, ScrollView, Switch, Text, View } from "react-native";
 
+import { isPaywallError, presentPaywall } from "@/core/billing/paywall";
 import { getModuleIcon } from "@/core/modules/icon-map";
 import { useModulesCatalog } from "@/core/modules/data/useModulesCatalog";
 import {
@@ -18,6 +19,19 @@ export default function StoreScreen() {
   const userModules = useUserModules();
   const setEnabled = useSetModuleEnabled();
   const swapPosition = useSwapModulePosition();
+
+  const enableModule = (moduleId: string, enabled: boolean) => {
+    setEnabled.mutate(
+      { moduleId, enabled },
+      {
+        onError: async (error) => {
+          if (!enabled || !isPaywallError(error)) return;
+          const purchased = await presentPaywall();
+          if (purchased) setEnabled.mutate({ moduleId, enabled });
+        },
+      }
+    );
+  };
 
   if (catalog.isLoading || userModules.isLoading) {
     return (
@@ -92,7 +106,7 @@ export default function StoreScreen() {
                 <Switch
                   value
                   disabled={setEnabled.isPending}
-                  onValueChange={() => setEnabled.mutate({ moduleId: um.module_id, enabled: false })}
+                  onValueChange={() => enableModule(um.module_id, false)}
                   accessibilityLabel={`Disable ${um.module.name} module`}
                 />
               </View>
@@ -126,7 +140,7 @@ export default function StoreScreen() {
               <Switch
                 value={false}
                 disabled={setEnabled.isPending}
-                onValueChange={(next) => setEnabled.mutate({ moduleId: moduleRow.id, enabled: next })}
+                onValueChange={(next) => enableModule(moduleRow.id, next)}
                 accessibilityLabel={`Toggle ${moduleRow.name} module`}
               />
             </View>
