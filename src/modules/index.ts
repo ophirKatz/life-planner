@@ -4,7 +4,12 @@
 // DESIGN.md §5.1.
 import { registerLinkable } from "@/core/links/registry";
 import { registerModule } from "@/core/modules/registry";
+import { peopleModule } from "@/modules/people/definition";
 import { tasksModule } from "@/modules/tasks/definition";
 
-registerModule(tasksModule);
-tasksModule.linkableEntities.forEach(registerLinkable);
+const modules = [tasksModule, peopleModule];
+
+modules.forEach((mod) => {
+  registerModule(mod);
+  mod.linkableEntities.forEach(registerLinkable);
+});
