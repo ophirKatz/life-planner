@@ -15,6 +15,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 
 import { cn } from "@/core/ui/lib/utils";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 const WEEKDAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
@@ -37,16 +38,27 @@ export function MiniMonthCalendar({
   const gridStart = startOfWeek(startOfMonth(month));
   const gridEnd = endOfWeek(endOfMonth(month));
   const days = eachDayOfInterval({ start: gridStart, end: gridEnd });
+  const colors = useThemeColors();
 
   return (
     <View className="gap-3">
       <View className="flex-row items-center justify-between px-1">
-        <Pressable onPress={() => onMonthChange(subMonths(month, 1))} hitSlop={8}>
-          <ChevronLeft size={20} color="hsl(220 9% 46%)" />
+        <Pressable
+          onPress={() => onMonthChange(subMonths(month, 1))}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Previous month"
+        >
+          <ChevronLeft size={20} color={colors.mutedForeground} />
         </Pressable>
         <Text className="text-base font-semibold text-foreground">{format(month, "MMMM yyyy")}</Text>
-        <Pressable onPress={() => onMonthChange(addMonths(month, 1))} hitSlop={8}>
-          <ChevronRight size={20} color="hsl(220 9% 46%)" />
+        <Pressable
+          onPress={() => onMonthChange(addMonths(month, 1))}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Next month"
+        >
+          <ChevronRight size={20} color={colors.mutedForeground} />
         </Pressable>
       </View>
 

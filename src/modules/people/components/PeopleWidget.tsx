@@ -5,15 +5,17 @@ import { Text, View } from "react-native";
 import { usePeople } from "@/modules/people/data/usePeople";
 import { CardTitle, PressableCard } from "@/core/ui/Card";
 import { Skeleton } from "@/core/ui/Skeleton";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export function PeopleWidget() {
   const router = useRouter();
   const { data: people, isLoading } = usePeople();
+  const colors = useThemeColors();
 
   return (
     <PressableCard onPress={() => router.push("/modules/people")}>
       <View className="flex-row items-center gap-2 mb-3">
-        <Users size={18} color="#6366f1" />
+        <Users size={18} color={colors.accent} />
         <CardTitle>People</CardTitle>
       </View>
 

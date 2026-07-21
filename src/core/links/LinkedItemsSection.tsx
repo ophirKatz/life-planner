@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 
 import { useLinksForEntity } from "@/core/links/data/useLinksForEntity";
 import { Skeleton } from "@/core/ui/Skeleton";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export interface LinkedItemsSectionProps {
   entityType: string;
@@ -13,11 +14,12 @@ export interface LinkedItemsSectionProps {
  * reciprocal view from the other side) is wired up per-module starting M4. */
 export function LinkedItemsSection({ entityType, entityId }: LinkedItemsSectionProps) {
   const { data: links, isLoading } = useLinksForEntity(entityType, entityId);
+  const colors = useThemeColors();
 
   return (
     <View className="gap-2">
       <View className="flex-row items-center gap-2">
-        <Link2 size={16} color="hsl(220 9% 46%)" />
+        <Link2 size={16} color={colors.mutedForeground} />
         <Text className="text-sm font-medium text-muted-foreground">Linked items</Text>
       </View>
 

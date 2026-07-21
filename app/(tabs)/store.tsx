@@ -13,12 +13,14 @@ import {
 import type { ModuleCatalogRow } from "@/core/modules/types";
 import { EmptyState } from "@/core/ui/EmptyState";
 import { SkeletonListItem } from "@/core/ui/Skeleton";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export default function StoreScreen() {
   const catalog = useModulesCatalog();
   const userModules = useUserModules();
   const setEnabled = useSetModuleEnabled();
   const swapPosition = useSwapModulePosition();
+  const colors = useThemeColors();
 
   const enableModule = (moduleId: string, enabled: boolean) => {
     setEnabled.mutate(
@@ -87,18 +89,22 @@ export default function StoreScreen() {
                   <Pressable
                     disabled={index === 0}
                     hitSlop={8}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Move ${um.module.name} up`}
                     onPress={() => swapPosition.mutate({ a: um, b: enabled[index - 1] as UserModuleRow })}
                   >
-                    <ChevronUp size={18} color={index === 0 ? "transparent" : "hsl(220 9% 46%)"} />
+                    <ChevronUp size={18} color={index === 0 ? "transparent" : colors.mutedForeground} />
                   </Pressable>
                   <Pressable
                     disabled={index === enabled.length - 1}
                     hitSlop={8}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Move ${um.module.name} down`}
                     onPress={() => swapPosition.mutate({ a: um, b: enabled[index + 1] as UserModuleRow })}
                   >
                     <ChevronDown
                       size={18}
-                      color={index === enabled.length - 1 ? "transparent" : "hsl(220 9% 46%)"}
+                      color={index === enabled.length - 1 ? "transparent" : colors.mutedForeground}
                     />
                   </Pressable>
                 </View>
@@ -153,9 +159,10 @@ export default function StoreScreen() {
 
 function ModuleIcon({ icon }: { icon: string }) {
   const Icon = getModuleIcon(icon);
+  const colors = useThemeColors();
   return (
     <View className="h-11 w-11 rounded-xl bg-surface-muted items-center justify-center">
-      <Icon size={22} color="#6366f1" />
+      <Icon size={22} color={colors.accent} />
     </View>
   );
 }

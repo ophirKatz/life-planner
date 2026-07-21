@@ -9,9 +9,16 @@ export interface CheckboxProps {
   onCheckedChange: (checked: boolean) => void;
   disabled?: boolean;
   className?: string;
+  accessibilityLabel?: string;
 }
 
-export function Checkbox({ checked, onCheckedChange, disabled, className }: CheckboxProps) {
+export function Checkbox({
+  checked,
+  onCheckedChange,
+  disabled,
+  className,
+  accessibilityLabel,
+}: CheckboxProps) {
   return (
     <CheckboxPrimitive.Root
       checked={checked}
@@ -20,6 +27,9 @@ export function Checkbox({ checked, onCheckedChange, disabled, className }: Chec
         onCheckedChange(next);
       }}
       disabled={disabled}
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked, disabled }}
+      accessibilityLabel={accessibilityLabel}
       className={cn(
         "h-6 w-6 items-center justify-center rounded-md border-2 border-border",
         checked && "bg-accent border-accent",

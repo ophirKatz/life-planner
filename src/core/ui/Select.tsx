@@ -2,6 +2,7 @@ import * as SelectPrimitive from "@rn-primitives/select";
 import { Check, ChevronDown } from "lucide-react-native";
 
 import { cn } from "@/core/ui/lib/utils";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export const Select = SelectPrimitive.Root;
 
@@ -10,6 +11,7 @@ export function SelectTrigger({
   children,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
+  const colors = useThemeColors();
   return (
     <SelectPrimitive.Trigger
       className={cn(
@@ -19,7 +21,7 @@ export function SelectTrigger({
       {...props}
     >
       {children as React.ReactNode}
-      <ChevronDown size={18} color="hsl(220 9% 46%)" />
+      <ChevronDown size={18} color={colors.mutedForeground} />
     </SelectPrimitive.Trigger>
   );
 }
@@ -60,6 +62,7 @@ export function SelectItem({
   label,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Item>) {
+  const colors = useThemeColors();
   return (
     <SelectPrimitive.Item
       label={label}
@@ -71,7 +74,7 @@ export function SelectItem({
     >
       <SelectPrimitive.ItemText className="text-base text-foreground" />
       <SelectPrimitive.ItemIndicator>
-        <Check size={16} color="hsl(243 75% 59%)" />
+        <Check size={16} color={colors.accent} />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );

@@ -30,7 +30,7 @@ function NewListDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="icon" variant="secondary">
-          <Plus size={20} color="#1c1e21" />
+          <Plus size={20} />
         </Button>
       </DialogTrigger>
       <DialogContent>

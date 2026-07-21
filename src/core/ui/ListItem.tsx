@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react-native";
 import { Pressable, Text, View, type PressableProps } from "react-native";
 
 import { cn } from "@/core/ui/lib/utils";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export interface ListItemProps extends PressableProps {
   title: string;
@@ -22,6 +23,7 @@ export function ListItem({
   className,
   ...props
 }: ListItemProps) {
+  const colors = useThemeColors();
   return (
     <Pressable
       accessibilityRole={props.onPress ? "button" : undefined}
@@ -33,7 +35,7 @@ export function ListItem({
     >
       {Icon ? (
         <View className="h-10 w-10 items-center justify-center rounded-xl bg-surface-muted">
-          <Icon size={20} color="hsl(220 9% 46%)" />
+          <Icon size={20} color={colors.mutedForeground} />
         </View>
       ) : null}
 
@@ -49,7 +51,7 @@ export function ListItem({
       </View>
 
       {trailing}
-      {showChevron ? <ChevronRight size={18} color="hsl(220 9% 46%)" /> : null}
+      {showChevron ? <ChevronRight size={18} color={colors.mutedForeground} /> : null}
     </Pressable>
   );
 }

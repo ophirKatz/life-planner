@@ -6,18 +6,20 @@ import { Text, View } from "react-native";
 import { useCalendarEvents } from "@/modules/calendar/data/useCalendarEvents";
 import { CardTitle, PressableCard } from "@/core/ui/Card";
 import { Skeleton } from "@/core/ui/Skeleton";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export function CalendarWidget() {
   const router = useRouter();
   const now = new Date();
   const { data: events, isLoading } = useCalendarEvents(now, addDays(now, 14));
+  const colors = useThemeColors();
 
   const upcoming = (events ?? []).slice(0, 3);
 
   return (
     <PressableCard onPress={() => router.push("/(tabs)/calendar")}>
       <View className="flex-row items-center gap-2 mb-3">
-        <Calendar size={18} color="#6366f1" />
+        <Calendar size={18} color={colors.accent} />
         <CardTitle>Calendar</CardTitle>
       </View>
 

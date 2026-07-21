@@ -18,6 +18,7 @@ import { EmptyState } from "@/core/ui/EmptyState";
 import { Input } from "@/core/ui/Input";
 import { SkeletonListItem } from "@/core/ui/Skeleton";
 import { SwipeableRow } from "@/core/ui/SwipeableRow";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export function ShoppingItemsScreen({ listId }: { listId: string }) {
   const { data: items, isLoading, isError, refetch } = useShoppingItems(listId);
@@ -106,6 +107,7 @@ function ShoppingItemRowView({
   onMoveUp: (neighbor: ShoppingItemRow) => void;
   onMoveDown: (neighbor: ShoppingItemRow) => void;
 }) {
+  const colors = useThemeColors();
   return (
     <SwipeableRow
       actionLabel="Remove"
@@ -114,7 +116,11 @@ function ShoppingItemRowView({
       onTrigger={onDelete}
     >
       <View className="flex-row items-center gap-3 bg-bg px-6 py-3">
-        <Checkbox checked={item.checked} onCheckedChange={onToggle} />
+        <Checkbox
+          checked={item.checked}
+          onCheckedChange={onToggle}
+          accessibilityLabel={`Mark ${item.name} as ${item.checked ? "not bought" : "bought"}`}
+        />
         <View className="flex-1">
           <Text
             className={`text-base ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}
@@ -126,11 +132,23 @@ function ShoppingItemRowView({
           ) : null}
         </View>
         <View className="gap-0.5">
-          <Pressable disabled={!previous} onPress={() => previous && onMoveUp(previous)} hitSlop={8}>
-            <ChevronUp size={18} color={previous ? "hsl(220 9% 46%)" : "transparent"} />
+          <Pressable
+            disabled={!previous}
+            onPress={() => previous && onMoveUp(previous)}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={`Move ${item.name} up`}
+          >
+            <ChevronUp size={18} color={previous ? colors.mutedForeground : "transparent"} />
           </Pressable>
-          <Pressable disabled={!next} onPress={() => next && onMoveDown(next)} hitSlop={8}>
-            <ChevronDown size={18} color={next ? "hsl(220 9% 46%)" : "transparent"} />
+          <Pressable
+            disabled={!next}
+            onPress={() => next && onMoveDown(next)}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel={`Move ${item.name} down`}
+          >
+            <ChevronDown size={18} color={next ? colors.mutedForeground : "transparent"} />
           </Pressable>
         </View>
       </View>

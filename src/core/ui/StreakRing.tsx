@@ -1,6 +1,8 @@
 import { Text, View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
+
 export interface StreakRingProps {
   /** 0-1 progress for today's period (checked-in vs not, relative to target). */
   progress: number;
@@ -9,7 +11,8 @@ export interface StreakRingProps {
   size?: number;
 }
 
-export function StreakRing({ progress, streak, color = "#6366f1", size = 56 }: StreakRingProps) {
+export function StreakRing({ progress, streak, color, size = 56 }: StreakRingProps) {
+  const colors = useThemeColors();
   const strokeWidth = 5;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -22,7 +25,7 @@ export function StreakRing({ progress, streak, color = "#6366f1", size = 56 }: S
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke="hsl(220 14% 93%)"
+          stroke={colors.muted}
           strokeWidth={strokeWidth}
           fill="none"
         />
@@ -30,7 +33,7 @@ export function StreakRing({ progress, streak, color = "#6366f1", size = 56 }: S
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          stroke={color}
+          stroke={color ?? colors.accent}
           strokeWidth={strokeWidth}
           fill="none"
           strokeDasharray={circumference}

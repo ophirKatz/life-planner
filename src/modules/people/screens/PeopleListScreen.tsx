@@ -19,7 +19,7 @@ export function PeopleListScreen() {
       <View className="flex-row items-center justify-between px-6 pt-4 pb-2">
         <Text className="text-2xl font-semibold text-foreground">People</Text>
         <Button size="icon" variant="secondary" onPress={() => router.push("/modules/people/new")}>
-          <Plus size={20} color="#1c1e21" />
+          <Plus size={20} />
         </Button>
       </View>
 

@@ -8,11 +8,13 @@ import { useConnectGoogleCalendar } from "@/core/integrations/useConnectGoogleCa
 import { Button } from "@/core/ui/Button";
 import { EmptyState } from "@/core/ui/EmptyState";
 import { ListItem } from "@/core/ui/ListItem";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export default function IntegrationsScreen() {
   const { data: accounts, isLoading } = useConnectedAccounts();
   const { connect, isConnecting, error, needsUpgrade } = useConnectGoogleCalendar();
   const disconnect = useDisconnectAccount();
+  const colors = useThemeColors();
 
   return (
     <View className="flex-1 bg-bg">
@@ -43,9 +45,10 @@ export default function IntegrationsScreen() {
                       size="icon"
                       variant="ghost"
                       isLoading={disconnect.isPending}
+                      accessibilityLabel="Disconnect Google Calendar"
                       onPress={() => account.id && disconnect.mutate(account.id)}
                     >
-                      <Trash2 size={18} color="#ef4444" />
+                      <Trash2 size={18} color={colors.danger} />
                     </Button>
                   }
                 />

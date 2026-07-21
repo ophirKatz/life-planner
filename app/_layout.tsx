@@ -14,6 +14,7 @@ import { SessionProvider, useSession } from "@/core/auth/session";
 import { initPurchases } from "@/core/billing/purchases";
 import { ScheduledAsConfirmDialog } from "@/core/events/ScheduledAsConfirmDialog";
 import { registerForPushNotifications } from "@/core/notifications/registerForPushNotifications";
+import { ErrorBoundary } from "@/core/ui/ErrorBoundary";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -46,17 +47,19 @@ function RootNavigator() {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <SessionProvider>
-            <RootNavigator />
-            <StatusBar style="auto" />
-            <PortalHost />
-            <ScheduledAsConfirmDialog />
-          </SessionProvider>
-        </QueryClientProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <QueryClientProvider client={queryClient}>
+            <SessionProvider>
+              <RootNavigator />
+              <StatusBar style="auto" />
+              <PortalHost />
+              <ScheduledAsConfirmDialog />
+            </SessionProvider>
+          </QueryClientProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }

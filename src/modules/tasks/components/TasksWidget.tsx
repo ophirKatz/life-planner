@@ -5,10 +5,12 @@ import { Text, View } from "react-native";
 import { useTasks } from "@/modules/tasks/data/useTasks";
 import { CardTitle, PressableCard } from "@/core/ui/Card";
 import { Skeleton } from "@/core/ui/Skeleton";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export function TasksWidget() {
   const router = useRouter();
   const { data: tasks, isLoading } = useTasks();
+  const colors = useThemeColors();
 
   const open = (tasks ?? []).filter((t) => t.status !== "done");
   const nextUp = open.slice(0, 3);
@@ -16,7 +18,7 @@ export function TasksWidget() {
   return (
     <PressableCard onPress={() => router.push("/modules/tasks")}>
       <View className="flex-row items-center gap-2 mb-3">
-        <ListTodo size={18} color="#6366f1" />
+        <ListTodo size={18} color={colors.accent} />
         <CardTitle>Tasks</CardTitle>
       </View>
 

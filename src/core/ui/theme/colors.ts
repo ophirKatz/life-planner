@@ -8,6 +8,8 @@ export const themeColors = {
     foreground: "#1c1e21",
     mutedForeground: "#6b7280",
     accent: "#5b57f0",
+    danger: "#dc2626",
+    muted: "#e9ebef",
   },
   dark: {
     bg: "#0d0f14",
@@ -16,6 +18,8 @@ export const themeColors = {
     foreground: "#f2f3f5",
     mutedForeground: "#9aa0ab",
     accent: "#8b87f5",
+    danger: "#f87171",
+    muted: "#22262f",
   },
 } as const;
 

@@ -5,15 +5,17 @@ import { Text, View } from "react-native";
 import { useShoppingLists } from "@/modules/shopping/data/useShoppingLists";
 import { CardTitle, PressableCard } from "@/core/ui/Card";
 import { Skeleton } from "@/core/ui/Skeleton";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export function ShoppingWidget() {
   const router = useRouter();
   const { data: lists, isLoading } = useShoppingLists();
+  const colors = useThemeColors();
 
   return (
     <PressableCard onPress={() => router.push("/modules/shopping")}>
       <View className="flex-row items-center gap-2 mb-3">
-        <ShoppingCart size={18} color="#6366f1" />
+        <ShoppingCart size={18} color={colors.accent} />
         <CardTitle>Shopping</CardTitle>
       </View>
 

@@ -36,7 +36,7 @@ export function LinkEntityButton({
   return (
     <>
       <Button variant="secondary" onPress={() => setOpen(true)}>
-        {Icon ? <Icon size={16} color="#1c1e21" /> : null}
+        {Icon ? <Icon size={16} /> : null}
         <Text className="text-base font-medium text-foreground">{label}</Text>
       </Button>
 

@@ -4,9 +4,11 @@ import { Repeat } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 
 import type { CalendarEventRow } from "@/modules/calendar/types";
+import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export function EventListRow({ event }: { event: CalendarEventRow }) {
   const router = useRouter();
+  const colors = useThemeColors();
 
   return (
     <Pressable
@@ -23,7 +25,7 @@ export function EventListRow({ event }: { event: CalendarEventRow }) {
           {event.location ? ` · ${event.location}` : ""}
         </Text>
       </View>
-      {event.rrule ? <Repeat size={16} color="hsl(220 9% 46%)" /> : null}
+      {event.rrule ? <Repeat size={16} color={colors.mutedForeground} /> : null}
     </Pressable>
   );
 }

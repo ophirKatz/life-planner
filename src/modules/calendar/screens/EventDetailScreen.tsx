@@ -113,7 +113,7 @@ export function EventDetailScreen({ id }: { id: string }) {
                 })
               }
             >
-              <BellRing size={16} color="#1c1e21" />
+              <BellRing size={16} />
               <Text className="text-base font-medium text-foreground">Remind me</Text>
             </Button>
           ) : null}
