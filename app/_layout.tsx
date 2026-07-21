@@ -1,4 +1,5 @@
 import "@/core/ui/theme/global.css";
+import "@/core/notifications/handler";
 import "@/modules";
 
 import { PortalHost } from "@rn-primitives/portal";
@@ -12,6 +13,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SessionProvider, useSession } from "@/core/auth/session";
 import { initPurchases } from "@/core/billing/purchases";
 import { ScheduledAsConfirmDialog } from "@/core/events/ScheduledAsConfirmDialog";
+import { registerForPushNotifications } from "@/core/notifications/registerForPushNotifications";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -21,7 +23,9 @@ function RootNavigator() {
   const { session, isLoading } = useSession();
 
   useEffect(() => {
-    if (session?.user.id) initPurchases(session.user.id);
+    if (!session?.user.id) return;
+    initPurchases(session.user.id);
+    registerForPushNotifications();
   }, [session?.user.id]);
 
   if (isLoading) return null;

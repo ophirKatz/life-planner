@@ -1,7 +1,7 @@
-import { endOfDay, set, startOfDay } from "date-fns";
+import { endOfDay, set, startOfDay, subMinutes } from "date-fns";
 import { useRouter } from "expo-router";
-import { AlertTriangle, Users } from "lucide-react-native";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { AlertTriangle, BellRing, Users } from "lucide-react-native";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EventForm, type EventFormValues } from "@/modules/calendar/components/EventForm";
@@ -13,6 +13,7 @@ import {
 import { REPEAT_TO_RRULE, rruleToRepeatOption } from "@/modules/calendar/types";
 import { LinkEntityButton } from "@/core/links/LinkEntityButton";
 import { LinkedItemsSection } from "@/core/links/LinkedItemsSection";
+import { useScheduleReminder } from "@/core/notifications/useScheduleReminder";
 import { Button } from "@/core/ui/Button";
 import { EmptyState } from "@/core/ui/EmptyState";
 
@@ -21,6 +22,7 @@ export function EventDetailScreen({ id }: { id: string }) {
   const { data: event, isLoading, isError } = useCalendarEvent(id);
   const updateEvent = useUpdateCalendarEvent();
   const deleteEvent = useDeleteCalendarEvent();
+  const scheduleReminder = useScheduleReminder();
 
   if (isLoading) {
     return (
@@ -98,6 +100,23 @@ export function EventDetailScreen({ id }: { id: string }) {
             targetType="person"
             relType="attendee"
           />
+          {!event.all_day ? (
+            <Button
+              variant="secondary"
+              isLoading={scheduleReminder.isPending}
+              onPress={() =>
+                scheduleReminder.mutate({
+                  title: event.title,
+                  body: "Starting in 30 minutes",
+                  deliverAt: subMinutes(new Date(event.starts_at), 30),
+                  data: { entityType: "calendar_event", entityId: event.id },
+                })
+              }
+            >
+              <BellRing size={16} color="#1c1e21" />
+              <Text className="text-base font-medium text-foreground">Remind me</Text>
+            </Button>
+          ) : null}
         </View>
 
         <LinkedItemsSection entityType="calendar_event" entityId={event.id} />

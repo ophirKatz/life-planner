@@ -1,10 +1,11 @@
 import { useRouter } from "expo-router";
-import { AlertTriangle, Calendar, Users } from "lucide-react-native";
+import { AlertTriangle, BellRing, Calendar, Users } from "lucide-react-native";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { LinkEntityButton } from "@/core/links/LinkEntityButton";
 import { LinkedItemsSection } from "@/core/links/LinkedItemsSection";
+import { useScheduleReminder } from "@/core/notifications/useScheduleReminder";
 import { TaskForm } from "@/modules/tasks/components/TaskForm";
 import { useDeleteTask, useTask, useUpdateTask } from "@/modules/tasks/data/useTasks";
 import { Button } from "@/core/ui/Button";
@@ -15,6 +16,7 @@ export function TaskDetailScreen({ id }: { id: string }) {
   const { data: task, isLoading, isError } = useTask(id);
   const updateTask = useUpdateTask();
   const deleteTask = useDeleteTask();
+  const scheduleReminder = useScheduleReminder();
 
   if (isLoading) {
     return (
@@ -73,6 +75,23 @@ export function TaskDetailScreen({ id }: { id: string }) {
             targetType="calendar_event"
             relType="scheduled_as"
           />
+          {task.due_at ? (
+            <Button
+              variant="secondary"
+              isLoading={scheduleReminder.isPending}
+              onPress={() =>
+                scheduleReminder.mutate({
+                  title: task.title,
+                  body: "Due now",
+                  deliverAt: new Date(task.due_at as string),
+                  data: { entityType: "task", entityId: task.id },
+                })
+              }
+            >
+              <BellRing size={16} color="#1c1e21" />
+              <Text className="text-base font-medium text-foreground">Remind me</Text>
+            </Button>
+          ) : null}
         </View>
 
         <View className="mt-6">
