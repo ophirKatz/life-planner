@@ -1,13 +1,17 @@
-import { Text, View, type ViewProps } from "react-native";
+import { Pressable, Text, View, type PressableProps, type ViewProps } from "react-native";
 
 import { cn } from "@/core/ui/lib/utils";
 
+const cardClassName = "rounded-2xl bg-surface border border-border p-4 shadow-sm";
+
 export function Card({ className, ...props }: ViewProps) {
+  return <View className={cn(cardClassName, className)} {...props} />;
+}
+
+/** Same look as Card, but a real Pressable — for tappable dashboard widgets. */
+export function PressableCard({ className, ...props }: PressableProps) {
   return (
-    <View
-      className={cn("rounded-2xl bg-surface border border-border p-4 shadow-sm", className)}
-      {...props}
-    />
+    <Pressable className={cn(cardClassName, "active:opacity-70", className)} {...props} />
   );
 }
 

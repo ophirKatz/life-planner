@@ -1,4 +1,5 @@
 import "@/core/ui/theme/global.css";
+import "@/modules";
 
 import { PortalHost } from "@rn-primitives/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -25,6 +26,7 @@ function RootNavigator() {
       </Stack.Protected>
       <Stack.Protected guard={!!session}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="modules" />
       </Stack.Protected>
     </Stack>
   );

@@ -1,5 +1,5 @@
-import type { ComponentType } from "react";
 import type { LucideIcon } from "lucide-react-native";
+import type { ReactElement } from "react";
 
 import type { Tables } from "@/core/db/types";
 
@@ -15,7 +15,7 @@ export interface RouteRegistration {
   title: string;
 }
 
-export type WidgetComponent = ComponentType<Record<string, never>>;
+export type WidgetComponent = () => ReactElement;
 
 export interface QuickAddAction {
   id: string;

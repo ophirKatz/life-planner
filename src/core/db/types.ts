@@ -24,6 +24,78 @@ export type Database = {
   }
   public: {
     Tables: {
+      calendar_events: {
+        Row: {
+          account_id: string | null
+          all_day: boolean
+          color: string
+          created_at: string
+          description: string | null
+          ends_at: string
+          external_etag: string | null
+          external_id: string | null
+          id: string
+          location: string | null
+          rrule: string | null
+          source: string
+          starts_at: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          all_day?: boolean
+          color?: string
+          created_at?: string
+          description?: string | null
+          ends_at: string
+          external_etag?: string | null
+          external_id?: string | null
+          id?: string
+          location?: string | null
+          rrule?: string | null
+          source?: string
+          starts_at: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          all_day?: boolean
+          color?: string
+          created_at?: string
+          description?: string | null
+          ends_at?: string
+          external_etag?: string | null
+          external_id?: string | null
+          id?: string
+          location?: string | null
+          rrule?: string | null
+          source?: string
+          starts_at?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "connected_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_events_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "connected_accounts_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       connected_accounts: {
         Row: {
           access_token_enc: string | null
@@ -73,6 +145,92 @@ export type Database = {
           status?: string
           sync_token?: string | null
           token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      habit_logs: {
+        Row: {
+          count: number
+          created_at: string
+          date: string
+          habit_id: string
+          id: string
+          note: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          date: string
+          habit_id: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          date?: string
+          habit_id?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_logs_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      habits: {
+        Row: {
+          archived_at: string | null
+          cadence: string
+          color: string
+          created_at: string
+          description: string | null
+          icon: string
+          id: string
+          name: string
+          schedule: Json
+          target_per_period: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          archived_at?: string | null
+          cadence?: string
+          color?: string
+          created_at?: string
+          description?: string | null
+          icon?: string
+          id?: string
+          name: string
+          schedule?: Json
+          target_per_period?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          archived_at?: string | null
+          cadence?: string
+          color?: string
+          created_at?: string
+          description?: string | null
+          icon?: string
+          id?: string
+          name?: string
+          schedule?: Json
+          target_per_period?: number
           updated_at?: string
           user_id?: string
         }
@@ -195,6 +353,75 @@ export type Database = {
         }
         Relationships: []
       }
+      people: {
+        Row: {
+          account_id: string | null
+          avatar_url: string | null
+          birthday: string | null
+          created_at: string
+          display_name: string
+          emails: string[]
+          external_etag: string | null
+          external_id: string | null
+          id: string
+          nickname: string | null
+          notes: string | null
+          phones: string[]
+          source: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          avatar_url?: string | null
+          birthday?: string | null
+          created_at?: string
+          display_name: string
+          emails?: string[]
+          external_etag?: string | null
+          external_id?: string | null
+          id?: string
+          nickname?: string | null
+          notes?: string | null
+          phones?: string[]
+          source?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          avatar_url?: string | null
+          birthday?: string | null
+          created_at?: string
+          display_name?: string
+          emails?: string[]
+          external_etag?: string | null
+          external_id?: string | null
+          id?: string
+          nickname?: string | null
+          notes?: string | null
+          phones?: string[]
+          source?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "people_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "connected_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "people_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "connected_accounts_safe"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -249,6 +476,86 @@ export type Database = {
         }
         Relationships: []
       }
+      shopping_items: {
+        Row: {
+          category: string | null
+          checked: boolean
+          created_at: string
+          id: string
+          list_id: string
+          name: string
+          notes: string | null
+          position: number
+          quantity: number
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          checked?: boolean
+          created_at?: string
+          id?: string
+          list_id: string
+          name: string
+          notes?: string | null
+          position?: number
+          quantity?: number
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          checked?: boolean
+          created_at?: string
+          id?: string
+          list_id?: string
+          name?: string
+          notes?: string | null
+          position?: number
+          quantity?: number
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shopping_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "shopping_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shopping_lists: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           active_entitlements: string[]
@@ -281,6 +588,112 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      task_lists: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          account_id: string | null
+          completed_at: string | null
+          created_at: string
+          due_at: string | null
+          external_etag: string | null
+          external_id: string | null
+          id: string
+          list_id: string | null
+          notes: string | null
+          priority: number
+          source: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          account_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          due_at?: string | null
+          external_etag?: string | null
+          external_id?: string | null
+          id?: string
+          list_id?: string | null
+          notes?: string | null
+          priority?: number
+          source?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          account_id?: string | null
+          completed_at?: string | null
+          created_at?: string
+          due_at?: string | null
+          external_etag?: string | null
+          external_id?: string | null
+          id?: string
+          list_id?: string | null
+          notes?: string | null
+          priority?: number
+          source?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "connected_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "connected_accounts_safe"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "task_lists"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_modules: {
         Row: {

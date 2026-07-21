@@ -17,9 +17,21 @@ export function useEnabledModules(): ModuleDefinition[] {
   }, [userModules]);
 }
 
-export function useModuleWidgets(): WidgetComponent[] {
+export interface DashboardWidgetEntry {
+  key: string;
+  slug: string;
+  Widget: WidgetComponent;
+}
+
+export function useModuleWidgets(): DashboardWidgetEntry[] {
   const enabled = useEnabledModules();
-  return useMemo(() => enabled.flatMap((m) => m.dashboardWidgets), [enabled]);
+  return useMemo(
+    () =>
+      enabled.flatMap((m) =>
+        m.dashboardWidgets.map((Widget, i) => ({ key: `${m.slug}.${i}`, slug: m.slug, Widget }))
+      ),
+    [enabled]
+  );
 }
 
 export function useQuickAddActions(): QuickAddAction[] {
