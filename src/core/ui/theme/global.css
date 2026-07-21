@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* "Calm productivity": restrained neutrals + one confident accent (DESIGN.md §9). */
+:root {
+  --border: 220 13% 88%;
+  --bg: 0 0% 100%;
+  --surface: 0 0% 100%;
+  --surface-muted: 220 20% 97%;
+  --foreground: 222 20% 12%;
+  --muted: 220 14% 93%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 243 75% 59%;
+  --accent-foreground: 0 0% 100%;
+  --danger: 0 72% 51%;
+  --danger-foreground: 0 0% 100%;
+  --success: 152 60% 36%;
+  --success-foreground: 0 0% 100%;
+}
+
+.dark:root {
+  --border: 222 14% 20%;
+  --bg: 222 24% 7%;
+  --surface: 222 20% 10%;
+  --surface-muted: 222 18% 14%;
+  --foreground: 210 20% 96%;
+  --muted: 222 16% 16%;
+  --muted-foreground: 218 10% 65%;
+  --accent: 243 82% 70%;
+  --accent-foreground: 222 24% 7%;
+  --danger: 0 70% 62%;
+  --danger-foreground: 222 24% 7%;
+  --success: 152 55% 55%;
+  --success-foreground: 222 24% 7%;
+}
