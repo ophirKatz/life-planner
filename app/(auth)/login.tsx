@@ -1,6 +1,7 @@
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import { useGoogleSignIn } from "@/core/auth/useGoogleSignIn";
+import { Button } from "@/core/ui/Button";
 
 export default function LoginScreen() {
   const { signInWithGoogle, isSigningIn, error } = useGoogleSignIn();
@@ -14,19 +15,14 @@ export default function LoginScreen() {
         </Text>
       </View>
 
-      <Pressable
+      <Button
+        label="Continue with Google"
         onPress={signInWithGoogle}
-        disabled={isSigningIn}
-        accessibilityRole="button"
+        isLoading={isSigningIn}
+        size="lg"
+        className="w-full max-w-xs"
         accessibilityLabel="Continue with Google"
-        className="w-full max-w-xs flex-row items-center justify-center gap-2 rounded-2xl bg-accent px-6 py-4 active:opacity-80 disabled:opacity-60"
-      >
-        {isSigningIn ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text className="text-accent-foreground text-base font-medium">Continue with Google</Text>
-        )}
-      </Pressable>
+      />
 
       {error ? (
         <Text className="mt-4 text-sm text-danger text-center max-w-xs">{error}</Text>

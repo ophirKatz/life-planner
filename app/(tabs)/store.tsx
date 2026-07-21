@@ -1,9 +1,12 @@
-import { ActivityIndicator, ScrollView, Switch, Text, View } from "react-native";
+import { AlertCircle } from "lucide-react-native";
+import { ScrollView, Switch, Text, View } from "react-native";
 
 import { getModuleIcon } from "@/core/modules/icon-map";
 import { useModulesCatalog } from "@/core/modules/data/useModulesCatalog";
 import { useSetModuleEnabled, useUserModules } from "@/core/modules/data/useUserModules";
 import type { ModuleCatalogRow } from "@/core/modules/types";
+import { EmptyState } from "@/core/ui/EmptyState";
+import { SkeletonListItem } from "@/core/ui/Skeleton";
 
 export default function StoreScreen() {
   const catalog = useModulesCatalog();
@@ -12,18 +15,28 @@ export default function StoreScreen() {
 
   if (catalog.isLoading || userModules.isLoading) {
     return (
-      <View className="flex-1 bg-bg items-center justify-center">
-        <ActivityIndicator />
+      <View className="flex-1 bg-bg px-6 pt-16 gap-3">
+        <Text className="text-2xl font-semibold text-foreground mb-2">Store</Text>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <SkeletonListItem key={i} />
+        ))}
       </View>
     );
   }
 
-  if (catalog.isError) {
+  if (catalog.isError || userModules.isError) {
     return (
-      <View className="flex-1 bg-bg items-center justify-center px-8">
-        <Text className="text-base text-danger text-center">
-          Couldn't load the module store. Pull to retry.
-        </Text>
+      <View className="flex-1 bg-bg">
+        <EmptyState
+          icon={AlertCircle}
+          title="Couldn't load the module store"
+          description="Check your connection and try again."
+          actionLabel="Retry"
+          onAction={() => {
+            catalog.refetch();
+            userModules.refetch();
+          }}
+        />
       </View>
     );
   }
