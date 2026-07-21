@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
-import { AlertTriangle } from "lucide-react-native";
-import { ActivityIndicator, View } from "react-native";
+import { AlertTriangle, Calendar, ListTodo } from "lucide-react-native";
+import { ActivityIndicator, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { LinkEntityButton } from "@/core/links/LinkEntityButton";
 import { LinkedItemsSection } from "@/core/links/LinkedItemsSection";
 import { PersonForm } from "@/modules/people/components/PersonForm";
 import { useDeletePerson, usePerson, useUpdatePerson } from "@/modules/people/data/usePeople";
@@ -33,7 +34,7 @@ export function PersonDetailScreen({ id }: { id: string }) {
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-bg">
-      <View className="px-6 pt-4 pb-6 gap-6">
+      <ScrollView contentContainerClassName="px-6 pt-4 pb-10 gap-6">
         <PersonForm
           submitLabel="Save changes"
           isSubmitting={updatePerson.isPending}
@@ -58,6 +59,27 @@ export function PersonDetailScreen({ id }: { id: string }) {
           }}
         />
 
+        <View className="flex-row flex-wrap gap-2">
+          <LinkEntityButton
+            label="Link a task"
+            icon={ListTodo}
+            pickerTitle="Link a task"
+            sourceType="person"
+            sourceId={person.id}
+            targetType="task"
+            relType="related"
+          />
+          <LinkEntityButton
+            label="Link an event"
+            icon={Calendar}
+            pickerTitle="Link an event"
+            sourceType="person"
+            sourceId={person.id}
+            targetType="calendar_event"
+            relType="attendee"
+          />
+        </View>
+
         <LinkedItemsSection entityType="person" entityId={person.id} />
 
         <Button
@@ -66,7 +88,7 @@ export function PersonDetailScreen({ id }: { id: string }) {
           isLoading={deletePerson.isPending}
           onPress={() => deletePerson.mutate(person.id, { onSuccess: () => router.back() })}
         />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

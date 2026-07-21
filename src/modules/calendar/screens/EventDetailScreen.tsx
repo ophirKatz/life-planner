@@ -1,6 +1,6 @@
 import { endOfDay, set, startOfDay } from "date-fns";
 import { useRouter } from "expo-router";
-import { AlertTriangle } from "lucide-react-native";
+import { AlertTriangle, Users } from "lucide-react-native";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -11,6 +11,7 @@ import {
   useUpdateCalendarEvent,
 } from "@/modules/calendar/data/useCalendarEvents";
 import { REPEAT_TO_RRULE, rruleToRepeatOption } from "@/modules/calendar/types";
+import { LinkEntityButton } from "@/core/links/LinkEntityButton";
 import { LinkedItemsSection } from "@/core/links/LinkedItemsSection";
 import { Button } from "@/core/ui/Button";
 import { EmptyState } from "@/core/ui/EmptyState";
@@ -84,6 +85,18 @@ export function EventDetailScreen({ id }: { id: string }) {
                 },
               });
             }}
+          />
+        </View>
+
+        <View className="flex-row flex-wrap gap-2">
+          <LinkEntityButton
+            label="Link a person"
+            icon={Users}
+            pickerTitle="Link a person"
+            sourceType="calendar_event"
+            sourceId={event.id}
+            targetType="person"
+            relType="attendee"
           />
         </View>
 

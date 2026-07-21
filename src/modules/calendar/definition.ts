@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { Calendar as CalendarIcon } from "lucide-react-native";
 
 import { CalendarWidget } from "@/modules/calendar/components/CalendarWidget";
-import { resolveCalendarEvent } from "@/modules/calendar/linkable";
+import { listAllCalendarEvents, resolveCalendarEvent } from "@/modules/calendar/linkable";
 import type { ModuleDefinition } from "@/core/modules/types";
 
 export const calendarModule: ModuleDefinition = {
@@ -29,6 +29,7 @@ export const calendarModule: ModuleDefinition = {
       table: "calendar_events",
       label: "Event",
       resolve: resolveCalendarEvent,
+      listAll: listAllCalendarEvents,
     },
   ],
 };

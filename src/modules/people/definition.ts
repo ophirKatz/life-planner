@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { Users } from "lucide-react-native";
 
 import { PeopleWidget } from "@/modules/people/components/PeopleWidget";
-import { resolvePerson } from "@/modules/people/linkable";
+import { listAllPeople, resolvePerson } from "@/modules/people/linkable";
 import type { ModuleDefinition } from "@/core/modules/types";
 
 export const peopleModule: ModuleDefinition = {
@@ -20,5 +20,7 @@ export const peopleModule: ModuleDefinition = {
       onPress: () => router.push("/modules/people/new"),
     },
   ],
-  linkableEntities: [{ type: "person", table: "people", label: "Person", resolve: resolvePerson }],
+  linkableEntities: [
+    { type: "person", table: "people", label: "Person", resolve: resolvePerson, listAll: listAllPeople },
+  ],
 };

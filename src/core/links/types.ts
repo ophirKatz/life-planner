@@ -14,4 +14,5 @@ export interface CreateLinkInput {
 export interface ResolvedLinkTarget {
   id: string;
   title: string;
+  subtitle?: string;
 }

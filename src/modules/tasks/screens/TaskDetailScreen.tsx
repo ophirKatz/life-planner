@@ -1,8 +1,10 @@
 import { useRouter } from "expo-router";
-import { AlertTriangle } from "lucide-react-native";
-import { ActivityIndicator, Text, View } from "react-native";
+import { AlertTriangle, Calendar, Users } from "lucide-react-native";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { LinkEntityButton } from "@/core/links/LinkEntityButton";
+import { LinkedItemsSection } from "@/core/links/LinkedItemsSection";
 import { TaskForm } from "@/modules/tasks/components/TaskForm";
 import { useDeleteTask, useTask, useUpdateTask } from "@/modules/tasks/data/useTasks";
 import { Button } from "@/core/ui/Button";
@@ -32,7 +34,7 @@ export function TaskDetailScreen({ id }: { id: string }) {
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-bg">
-      <View className="px-6 pt-4 pb-6">
+      <ScrollView contentContainerClassName="px-6 pt-4 pb-10">
         <Text className="text-2xl font-semibold text-foreground mb-6">Edit task</Text>
         <TaskForm
           submitLabel="Save changes"
@@ -52,14 +54,39 @@ export function TaskDetailScreen({ id }: { id: string }) {
           }}
         />
 
+        <View className="flex-row flex-wrap gap-2 mt-6">
+          <LinkEntityButton
+            label="Link a person"
+            icon={Users}
+            pickerTitle="Link a person"
+            sourceType="task"
+            sourceId={task.id}
+            targetType="person"
+            relType="related"
+          />
+          <LinkEntityButton
+            label="Schedule as event"
+            icon={Calendar}
+            pickerTitle="Schedule as event"
+            sourceType="task"
+            sourceId={task.id}
+            targetType="calendar_event"
+            relType="scheduled_as"
+          />
+        </View>
+
+        <View className="mt-6">
+          <LinkedItemsSection entityType="task" entityId={task.id} />
+        </View>
+
         <Button
           label="Delete task"
           variant="destructive"
-          className="mt-4"
+          className="mt-6"
           isLoading={deleteTask.isPending}
           onPress={() => deleteTask.mutate(task.id, { onSuccess: () => router.back() })}
         />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

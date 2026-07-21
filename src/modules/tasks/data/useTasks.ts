@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { supabase } from "@/core/db/supabase";
+import { emit } from "@/core/events/bus";
 import type { TaskInsert, TaskRow, TaskUpdate } from "@/modules/tasks/types";
 
 export const tasksKey = ["tasks"] as const;
@@ -95,6 +96,9 @@ export function useToggleTaskDone() {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: tasksKey }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: tasksKey });
+      emit({ type: "record.updated", entityType: "task", entityId: data.id, data: { status: data.status } });
+    },
   });
 }

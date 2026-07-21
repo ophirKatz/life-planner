@@ -1,8 +1,9 @@
 import { router } from "expo-router";
 import { ListTodo } from "lucide-react-native";
 
+import { taskScheduledAsAutomation } from "@/modules/tasks/automations";
 import { TasksWidget } from "@/modules/tasks/components/TasksWidget";
-import { resolveTask } from "@/modules/tasks/linkable";
+import { listAllTasks, resolveTask } from "@/modules/tasks/linkable";
 import type { ModuleDefinition } from "@/core/modules/types";
 
 export const tasksModule: ModuleDefinition = {
@@ -20,5 +21,8 @@ export const tasksModule: ModuleDefinition = {
       onPress: () => router.push("/modules/tasks/new"),
     },
   ],
-  linkableEntities: [{ type: "task", table: "tasks", label: "Task", resolve: resolveTask }],
+  linkableEntities: [
+    { type: "task", table: "tasks", label: "Task", resolve: resolveTask, listAll: listAllTasks },
+  ],
+  automations: [taskScheduledAsAutomation],
 };

@@ -6,3 +6,13 @@ export async function resolveTask(id: string): Promise<ResolvedLinkTarget | null
   if (error || !data) return null;
   return { id: data.id, title: data.title };
 }
+
+export async function listAllTasks(): Promise<ResolvedLinkTarget[]> {
+  const { data, error } = await supabase
+    .from("tasks")
+    .select("id, title")
+    .neq("status", "done")
+    .order("title");
+  if (error) throw error;
+  return data;
+}

@@ -1,7 +1,8 @@
 // Bootstraps every first-party module: importing this file registers each
-// module's ModuleDefinition and linkable entities. Adding a module means
-// adding one import + one registerModule/registerLinkable call here — see
+// module's ModuleDefinition, linkable entities, and automations. Adding a
+// module means adding one import + one entry in `modules` here — see
 // DESIGN.md §5.1.
+import { registerAutomations } from "@/core/events/runner";
 import { registerLinkable } from "@/core/links/registry";
 import { registerModule } from "@/core/modules/registry";
 import { calendarModule } from "@/modules/calendar/definition";
@@ -16,3 +17,5 @@ modules.forEach((mod) => {
   registerModule(mod);
   mod.linkableEntities.forEach(registerLinkable);
 });
+
+registerAutomations(modules);

@@ -701,6 +701,7 @@ export type Database = {
           id: string
           installed_at: string
           module_id: string
+          position: number
           settings: Json
           updated_at: string
           user_id: string
@@ -710,6 +711,7 @@ export type Database = {
           id?: string
           installed_at?: string
           module_id: string
+          position?: number
           settings?: Json
           updated_at?: string
           user_id: string
@@ -719,6 +721,7 @@ export type Database = {
           id?: string
           installed_at?: string
           module_id?: string
+          position?: number
           settings?: Json
           updated_at?: string
           user_id?: string

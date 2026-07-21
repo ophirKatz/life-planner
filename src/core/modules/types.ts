@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react-native";
 import type { ReactElement } from "react";
 
 import type { Tables } from "@/core/db/types";
+import type { AppEvent, AppEventType } from "@/core/events/types";
 
 export type ModuleTier = "free" | "pro";
 
@@ -31,6 +32,8 @@ export interface LinkableEntity {
   table: string;
   label: string;
   resolve: (id: string) => Promise<{ id: string; title: string } | null>;
+  /** Every pickable row of this type, for the generic link-creation picker. */
+  listAll: () => Promise<{ id: string; title: string; subtitle?: string }[]>;
 }
 
 export interface IntegrationUsage {
@@ -38,14 +41,10 @@ export interface IntegrationUsage {
   capability: "calendar" | "contacts";
 }
 
-export interface AutomationEvent {
-  type: string;
-  payload: unknown;
-}
-
 export interface Automation {
-  event: string;
-  handler: (event: AutomationEvent) => void | Promise<void>;
+  event: AppEventType;
+  /** Narrow on `event.type` inside the handler — it receives the full union. */
+  handler: (event: AppEvent) => void | Promise<void>;
 }
 
 /**

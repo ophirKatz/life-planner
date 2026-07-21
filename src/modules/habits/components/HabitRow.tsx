@@ -6,6 +6,7 @@ import { Pressable, Text, View } from "react-native";
 import { useHabitLogs, useToggleHabitToday } from "@/modules/habits/data/useHabitLogs";
 import { computeStreak, todayKey } from "@/modules/habits/streaks";
 import type { HabitRow as HabitRowType } from "@/modules/habits/types";
+import { emit } from "@/core/events/bus";
 import { ConfettiBurst } from "@/core/ui/ConfettiBurst";
 import { StreakRing } from "@/core/ui/StreakRing";
 
@@ -24,6 +25,7 @@ export function HabitRow({ habit, compact }: { habit: HabitRowType; compact?: bo
     if (!wasChecked) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       setBurstKey((k) => k + 1);
+      emit({ type: "habit.completed", habitId: habit.id });
     } else {
       Haptics.selectionAsync();
     }

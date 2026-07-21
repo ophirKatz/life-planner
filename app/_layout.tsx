@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { SessionProvider, useSession } from "@/core/auth/session";
+import { ScheduledAsConfirmDialog } from "@/core/events/ScheduledAsConfirmDialog";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } },
@@ -41,6 +42,7 @@ export default function RootLayout() {
             <RootNavigator />
             <StatusBar style="auto" />
             <PortalHost />
+            <ScheduledAsConfirmDialog />
           </SessionProvider>
         </QueryClientProvider>
       </SafeAreaProvider>
