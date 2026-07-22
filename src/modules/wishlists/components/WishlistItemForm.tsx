@@ -6,6 +6,7 @@ import { z } from "zod";
 import type { WishlistItemStatus, WishlistItemType } from "@/modules/wishlists/types";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 
 const TYPE_OPTIONS: { value: WishlistItemType; label: string }[] = [
   { value: "movie", label: "Movie" },
@@ -70,17 +71,7 @@ export function WishlistItemForm({ defaultValues, onSubmit, isSubmitting, submit
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Type</Text>
-            <View className="flex-row flex-wrap gap-2">
-              {TYPE_OPTIONS.map((option) => (
-                <Button
-                  key={option.value}
-                  label={option.label}
-                  size="sm"
-                  variant={field.value === option.value ? "default" : "secondary"}
-                  onPress={() => field.onChange(option.value)}
-                />
-              ))}
-            </View>
+            <OptionButtonGroup options={TYPE_OPTIONS} value={field.value} onChange={field.onChange} wrap />
           </View>
         )}
       />
@@ -91,18 +82,7 @@ export function WishlistItemForm({ defaultValues, onSubmit, isSubmitting, submit
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Status</Text>
-            <View className="flex-row gap-2">
-              {STATUS_OPTIONS.map((option) => (
-                <Button
-                  key={option.value}
-                  label={option.label}
-                  size="sm"
-                  variant={field.value === option.value ? "default" : "secondary"}
-                  className="flex-1"
-                  onPress={() => field.onChange(option.value)}
-                />
-              ))}
-            </View>
+            <OptionButtonGroup options={STATUS_OPTIONS} value={field.value} onChange={field.onChange} equalWidth />
           </View>
         )}
       />
@@ -113,17 +93,12 @@ export function WishlistItemForm({ defaultValues, onSubmit, isSubmitting, submit
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Rating</Text>
-            <View className="flex-row gap-2">
-              {RATING_OPTIONS.map((value) => (
-                <Button
-                  key={value}
-                  label={value === 0 ? "—" : "★".repeat(value)}
-                  size="sm"
-                  variant={field.value === value ? "default" : "secondary"}
-                  onPress={() => field.onChange(value)}
-                />
-              ))}
-            </View>
+            <OptionButtonGroup
+              options={RATING_OPTIONS.map((value) => ({ value, label: value === 0 ? "—" : "★".repeat(value) }))}
+              value={field.value}
+              onChange={field.onChange}
+              wrap
+            />
           </View>
         )}
       />

@@ -1,10 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { z } from "zod";
 
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
+import { NumberStepper } from "@/core/ui/NumberStepper";
 
 export const recipeFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -51,26 +52,7 @@ export function RecipeForm({ defaultValues, onSubmit, isSubmitting, submitLabel 
         control={control}
         name="servings"
         render={({ field }) => (
-          <View className="gap-1.5">
-            <Text className="text-sm font-medium text-foreground">Servings</Text>
-            <View className="flex-row items-center gap-4">
-              <Button
-                size="icon"
-                variant="secondary"
-                label="-"
-                onPress={() => field.onChange(Math.max(1, field.value - 1))}
-              />
-              <Text className="text-lg font-semibold text-foreground tabular-nums w-6 text-center">
-                {field.value}
-              </Text>
-              <Button
-                size="icon"
-                variant="secondary"
-                label="+"
-                onPress={() => field.onChange(Math.min(50, field.value + 1))}
-              />
-            </View>
-          </View>
+          <NumberStepper label="Servings" value={field.value} onChange={field.onChange} min={1} max={50} />
         )}
       />
 

@@ -6,6 +6,7 @@ import { z } from "zod";
 import type { WorkoutType } from "@/modules/workouts/types";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 
 const TYPE_OPTIONS: { value: WorkoutType; label: string }[] = [
   { value: "strength", label: "Strength" },
@@ -44,17 +45,7 @@ export function WorkoutForm({ defaultValues, onSubmit, isSubmitting, submitLabel
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Type</Text>
-            <View className="flex-row flex-wrap gap-2">
-              {TYPE_OPTIONS.map((option) => (
-                <Button
-                  key={option.value}
-                  label={option.label}
-                  size="sm"
-                  variant={field.value === option.value ? "default" : "secondary"}
-                  onPress={() => field.onChange(option.value)}
-                />
-              ))}
-            </View>
+            <OptionButtonGroup options={TYPE_OPTIONS} value={field.value} onChange={field.onChange} wrap />
           </View>
         )}
       />

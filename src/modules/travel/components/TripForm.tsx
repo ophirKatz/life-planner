@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
 import { cn } from "@/core/ui/lib/utils";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 
 const COLORS = ["#6366f1", "#f59e0b", "#22c55e", "#ec4899", "#0ea5e9", "#ef4444"];
 
@@ -37,30 +38,15 @@ function DateField({
   value: string;
   onChange: (value: string) => void;
 }) {
-  const options = [
-    { label: "Today", days: 0 },
-    { label: "+1 week", days: 7 },
-    { label: "+1 month", days: 30 },
-  ];
+  const options = [0, 7, 30].map((days) => ({
+    value: formatISO(addDays(startOfDay(new Date()), days), { representation: "date" }),
+    label: days === 0 ? "Today" : `+${days === 7 ? "1 week" : "1 month"}`,
+  }));
 
   return (
     <View className="gap-1.5">
       <Text className="text-sm font-medium text-foreground">{label}</Text>
-      <View className="flex-row gap-2">
-        {options.map((option) => {
-          const date = formatISO(addDays(startOfDay(new Date()), option.days), { representation: "date" });
-          return (
-            <Button
-              key={option.label}
-              label={option.label}
-              size="sm"
-              variant={value === date ? "default" : "secondary"}
-              className="flex-1"
-              onPress={() => onChange(date)}
-            />
-          );
-        })}
-      </View>
+      <OptionButtonGroup options={options} value={value} onChange={onChange} equalWidth />
     </View>
   );
 }

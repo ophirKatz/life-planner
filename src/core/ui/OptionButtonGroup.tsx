@@ -9,7 +9,7 @@ export interface Option<T> {
 }
 
 export interface OptionButtonGroupProps<T> {
-  options: Option<T>[];
+  options: readonly Option<T>[];
   value: T;
   onChange: (value: T) => void;
   /** Override the default value-equality check — e.g. TaskForm compares

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useTaskLists } from "@/modules/tasks/data/useTaskLists";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/core/ui/Select";
 import { TimeSelect } from "@/core/ui/TimeSelect";
 
@@ -94,18 +95,12 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel }:
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Priority</Text>
-            <View className="flex-row gap-2">
-              {priorityLabels.map((label, value) => (
-                <Button
-                  key={label}
-                  label={label}
-                  size="sm"
-                  variant={field.value === value ? "default" : "secondary"}
-                  className="flex-1"
-                  onPress={() => field.onChange(value)}
-                />
-              ))}
-            </View>
+            <OptionButtonGroup
+              options={priorityLabels.map((label, value) => ({ value, label }))}
+              value={field.value}
+              onChange={field.onChange}
+              equalWidth
+            />
           </View>
         )}
       />
@@ -120,33 +115,26 @@ export function TaskForm({ defaultValues, onSubmit, isSubmitting, submitLabel }:
           const isTomorrow = !!field.value && isSameDay(new Date(field.value), new Date(tomorrow));
           const timed = !!field.value && hasTime(field.value);
 
+          const dueChoice = isToday ? "today" : isTomorrow ? "tomorrow" : !field.value ? "none" : "custom";
+
           return (
             <View className="gap-3">
               <View className="gap-1.5">
                 <Text className="text-sm font-medium text-foreground">Due</Text>
-                <View className="flex-row gap-2">
-                  <Button
-                    label="Today"
-                    size="sm"
-                    variant={isToday ? "default" : "secondary"}
-                    className="flex-1"
-                    onPress={() => field.onChange(withDay(field.value, today))}
-                  />
-                  <Button
-                    label="Tomorrow"
-                    size="sm"
-                    variant={isTomorrow ? "default" : "secondary"}
-                    className="flex-1"
-                    onPress={() => field.onChange(withDay(field.value, tomorrow))}
-                  />
-                  <Button
-                    label="None"
-                    size="sm"
-                    variant={!field.value ? "default" : "secondary"}
-                    className="flex-1"
-                    onPress={() => field.onChange(null)}
-                  />
-                </View>
+                <OptionButtonGroup
+                  options={[
+                    { value: "today", label: "Today" },
+                    { value: "tomorrow", label: "Tomorrow" },
+                    { value: "none", label: "None" },
+                  ]}
+                  value={dueChoice}
+                  onChange={(choice) => {
+                    if (choice === "today") field.onChange(withDay(field.value, today));
+                    else if (choice === "tomorrow") field.onChange(withDay(field.value, tomorrow));
+                    else field.onChange(null);
+                  }}
+                  equalWidth
+                />
               </View>
 
               {field.value ? (

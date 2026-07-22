@@ -10,12 +10,18 @@ import {
 import type { ClimbingStyle } from "@/modules/climbing/types";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 import { Skeleton } from "@/core/ui/Skeleton";
 import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 const STYLES: { value: ClimbingStyle; label: string }[] = [
   { value: "boulder", label: "Boulder" },
   { value: "route", label: "Route" },
+];
+
+const SENT_OPTIONS: { value: boolean; label: string }[] = [
+  { value: true, label: "Sent" },
+  { value: false, label: "Attempted" },
 ];
 
 export function AttemptsSection({ sessionId }: { sessionId: string }) {
@@ -53,22 +59,9 @@ export function AttemptsSection({ sessionId }: { sessionId: string }) {
           />
           <Button label="Log" size="sm" onPress={submit} isLoading={logAttempt.isPending} disabled={!grade.trim()} />
         </View>
-        <View className="flex-row gap-2">
-          {STYLES.map((option) => (
-            <Button
-              key={option.value}
-              label={option.label}
-              size="sm"
-              variant={style === option.value ? "default" : "secondary"}
-              onPress={() => setStyle(option.value)}
-            />
-          ))}
-          <Button
-            label={sent ? "Sent" : "Attempted"}
-            size="sm"
-            variant={sent ? "default" : "secondary"}
-            onPress={() => setSent((v) => !v)}
-          />
+        <View className="flex-row flex-wrap gap-2">
+          <OptionButtonGroup options={STYLES} value={style} onChange={setStyle} />
+          <OptionButtonGroup options={SENT_OPTIONS} value={sent} onChange={setSent} />
         </View>
       </View>
 

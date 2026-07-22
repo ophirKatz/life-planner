@@ -9,6 +9,7 @@ import { useBudgetCategories, useCreateBudgetCategory } from "@/modules/budget/d
 import type { TransactionType } from "@/modules/budget/types";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/core/ui/Select";
 import { Sheet, SheetContent, SheetTrigger } from "@/core/ui/Sheet";
 
@@ -71,18 +72,15 @@ export function TransactionForm({ defaultValues, onSubmit, isSubmitting, submitL
         control={control}
         name="type"
         render={({ field }) => (
-          <View className="flex-row gap-2">
-            {(["expense", "income"] as TransactionType[]).map((type) => (
-              <Button
-                key={type}
-                label={type === "expense" ? "Expense" : "Income"}
-                size="sm"
-                variant={field.value === type ? "default" : "secondary"}
-                className="flex-1"
-                onPress={() => field.onChange(type)}
-              />
-            ))}
-          </View>
+          <OptionButtonGroup
+            options={[
+              { value: "expense" as TransactionType, label: "Expense" },
+              { value: "income" as TransactionType, label: "Income" },
+            ]}
+            value={field.value}
+            onChange={field.onChange}
+            equalWidth
+          />
         )}
       />
 
@@ -109,22 +107,15 @@ export function TransactionForm({ defaultValues, onSubmit, isSubmitting, submitL
           return (
             <View className="gap-1.5">
               <Text className="text-sm font-medium text-foreground">Date</Text>
-              <View className="flex-row gap-2">
-                <Button
-                  label="Today"
-                  size="sm"
-                  variant={field.value === today ? "default" : "secondary"}
-                  className="flex-1"
-                  onPress={() => field.onChange(today)}
-                />
-                <Button
-                  label="Yesterday"
-                  size="sm"
-                  variant={field.value === yesterday ? "default" : "secondary"}
-                  className="flex-1"
-                  onPress={() => field.onChange(yesterday)}
-                />
-              </View>
+              <OptionButtonGroup
+                options={[
+                  { value: today, label: "Today" },
+                  { value: yesterday, label: "Yesterday" },
+                ]}
+                value={field.value}
+                onChange={field.onChange}
+                equalWidth
+              />
             </View>
           );
         }}
