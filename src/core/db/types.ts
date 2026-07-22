@@ -96,6 +96,83 @@ export type Database = {
           },
         ]
       }
+      climbing_attempts: {
+        Row: {
+          attempts_count: number
+          created_at: string
+          grade: string
+          id: string
+          notes: string | null
+          sent: boolean
+          session_id: string
+          style: string
+          user_id: string
+        }
+        Insert: {
+          attempts_count?: number
+          created_at?: string
+          grade: string
+          id?: string
+          notes?: string | null
+          sent?: boolean
+          session_id: string
+          style?: string
+          user_id: string
+        }
+        Update: {
+          attempts_count?: number
+          created_at?: string
+          grade?: string
+          id?: string
+          notes?: string | null
+          sent?: boolean
+          session_id?: string
+          style?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "climbing_attempts_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "climbing_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      climbing_sessions: {
+        Row: {
+          created_at: string
+          duration_minutes: number | null
+          id: string
+          location: string | null
+          notes: string | null
+          session_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          session_date?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          session_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       connected_accounts: {
         Row: {
           access_token_enc: string | null

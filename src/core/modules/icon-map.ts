@@ -5,6 +5,7 @@ import {
   Flame,
   Lightbulb,
   ListTodo,
+  Mountain,
   Package,
   ShoppingCart,
   Sparkles,
@@ -27,6 +28,7 @@ const iconMap: Record<string, LucideIcon> = {
   bookmark: Bookmark,
   zap: Zap,
   "chef-hat": ChefHat,
+  mountain: Mountain,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {
