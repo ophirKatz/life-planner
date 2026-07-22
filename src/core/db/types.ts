@@ -150,6 +150,39 @@ export type Database = {
         }
         Relationships: []
       }
+      focus_summaries: {
+        Row: {
+          error: string | null
+          generated_at: string | null
+          id: string
+          period: string
+          status: string
+          summary: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          error?: string | null
+          generated_at?: string | null
+          id?: string
+          period: string
+          status?: string
+          summary?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          error?: string | null
+          generated_at?: string | null
+          id?: string
+          period?: string
+          status?: string
+          summary?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       habit_logs: {
         Row: {
           count: number

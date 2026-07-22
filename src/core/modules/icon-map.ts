@@ -8,6 +8,7 @@ import {
   ShoppingCart,
   Sparkles,
   Users,
+  Zap,
   type LucideIcon,
 } from "lucide-react-native";
 
@@ -23,6 +24,7 @@ const iconMap: Record<string, LucideIcon> = {
   sparkles: Sparkles,
   lightbulb: Lightbulb,
   bookmark: Bookmark,
+  zap: Zap,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {
