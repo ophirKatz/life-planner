@@ -3,6 +3,7 @@ import {
   Calendar,
   ChefHat,
   CloudSun,
+  Dumbbell,
   Flame,
   Lightbulb,
   ListTodo,
@@ -33,6 +34,7 @@ const iconMap: Record<string, LucideIcon> = {
   mountain: Mountain,
   "cloud-sun": CloudSun,
   wallet: Wallet,
+  dumbbell: Dumbbell,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {

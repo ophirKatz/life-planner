@@ -17,6 +17,7 @@ import { shoppingModule } from "@/modules/shopping/definition";
 import { tasksModule } from "@/modules/tasks/definition";
 import { weatherModule } from "@/modules/weather/definition";
 import { wishlistsModule } from "@/modules/wishlists/definition";
+import { workoutsModule } from "@/modules/workouts/definition";
 
 const modules = [
   tasksModule,
@@ -31,6 +32,7 @@ const modules = [
   climbingModule,
   weatherModule,
   budgetModule,
+  workoutsModule,
 ];
 
 modules.forEach((mod) => {

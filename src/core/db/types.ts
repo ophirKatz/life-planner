@@ -1137,6 +1137,42 @@ export type Database = {
         }
         Relationships: []
       }
+      workouts: {
+        Row: {
+          created_at: string
+          duration_minutes: number | null
+          exercises: string[]
+          id: string
+          notes: string | null
+          type: string
+          updated_at: string
+          user_id: string
+          workout_date: string
+        }
+        Insert: {
+          created_at?: string
+          duration_minutes?: number | null
+          exercises?: string[]
+          id?: string
+          notes?: string | null
+          type?: string
+          updated_at?: string
+          user_id: string
+          workout_date?: string
+        }
+        Update: {
+          created_at?: string
+          duration_minutes?: number | null
+          exercises?: string[]
+          id?: string
+          notes?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+          workout_date?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       connected_accounts_safe: {
