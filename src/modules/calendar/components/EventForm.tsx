@@ -5,21 +5,19 @@ import { Pressable, Text, View } from "react-native";
 import { z } from "zod";
 
 import { MiniMonthCalendar } from "@/modules/calendar/components/MiniMonthCalendar";
-import type { RepeatOption } from "@/modules/calendar/types";
 import { Button } from "@/core/ui/Button";
+import { FrequencyInput } from "@/core/ui/FrequencyInput";
 import { Input } from "@/core/ui/Input";
 import { cn } from "@/core/ui/lib/utils";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 import { TimeSelect } from "@/core/ui/TimeSelect";
 
-const REPEAT_OPTIONS: { value: RepeatOption; label: string }[] = [
-  { value: "none", label: "Never" },
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "monthly", label: "Monthly" },
-  { value: "yearly", label: "Yearly" },
-];
-
 const COLORS = ["#6366f1", "#f59e0b", "#22c55e", "#ec4899", "#0ea5e9", "#ef4444"];
+
+const frequencyValueSchema = z.object({
+  interval: z.number().min(1),
+  unit: z.enum(["day", "week", "month", "year"]),
+});
 
 export const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -29,7 +27,7 @@ export const eventFormSchema = z.object({
   date: z.date(),
   startTime: z.string(),
   endTime: z.string(),
-  repeat: z.enum(["none", "daily", "weekly", "monthly", "yearly"]),
+  repeat: frequencyValueSchema.nullable(),
   color: z.string(),
 });
 
@@ -80,22 +78,15 @@ export function EventForm({ defaultValues, onSubmit, isSubmitting, submitLabel }
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Duration</Text>
-            <View className="flex-row gap-2">
-              <Button
-                label="Timed"
-                size="sm"
-                variant={!field.value ? "default" : "secondary"}
-                className="flex-1"
-                onPress={() => field.onChange(false)}
-              />
-              <Button
-                label="All day"
-                size="sm"
-                variant={field.value ? "default" : "secondary"}
-                className="flex-1"
-                onPress={() => field.onChange(true)}
-              />
-            </View>
+            <OptionButtonGroup
+              options={[
+                { value: false, label: "Timed" },
+                { value: true, label: "All day" },
+              ]}
+              value={field.value}
+              onChange={field.onChange}
+              equalWidth
+            />
           </View>
         )}
       />
@@ -152,17 +143,7 @@ export function EventForm({ defaultValues, onSubmit, isSubmitting, submitLabel }
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Repeats</Text>
-            <View className="flex-row flex-wrap gap-2">
-              {REPEAT_OPTIONS.map((option) => (
-                <Button
-                  key={option.value}
-                  label={option.label}
-                  size="sm"
-                  variant={field.value === option.value ? "default" : "secondary"}
-                  onPress={() => field.onChange(option.value)}
-                />
-              ))}
-            </View>
+            <FrequencyInput value={field.value} onChange={field.onChange} />
           </View>
         )}
       />

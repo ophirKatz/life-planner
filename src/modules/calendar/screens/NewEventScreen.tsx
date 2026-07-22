@@ -4,7 +4,7 @@ import { Text } from "react-native";
 
 import { EventForm, type EventFormValues } from "@/modules/calendar/components/EventForm";
 import { useCreateCalendarEvent } from "@/modules/calendar/data/useCalendarEvents";
-import { REPEAT_TO_RRULE } from "@/modules/calendar/types";
+import { frequencyToRRule } from "@/modules/calendar/types";
 
 function buildEventPayload(values: EventFormValues) {
   const [startHour, startMinute] = values.startTime.split(":").map(Number);
@@ -24,7 +24,7 @@ function buildEventPayload(values: EventFormValues) {
     all_day: values.allDay,
     starts_at: startsAt.toISOString(),
     ends_at: endsAt < startsAt ? startsAt.toISOString() : endsAt.toISOString(),
-    rrule: values.repeat === "none" ? null : REPEAT_TO_RRULE[values.repeat],
+    rrule: frequencyToRRule(values.repeat),
     color: values.color,
   };
 }
@@ -47,7 +47,7 @@ export function NewEventScreen() {
           date: new Date(),
           startTime: "09:00",
           endTime: "10:00",
-          repeat: "none",
+          repeat: null,
           color: "#6366f1",
         }}
         onSubmit={(values) => {

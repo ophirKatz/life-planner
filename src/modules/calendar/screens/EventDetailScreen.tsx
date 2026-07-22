@@ -10,7 +10,7 @@ import {
   useDeleteCalendarEvent,
   useUpdateCalendarEvent,
 } from "@/modules/calendar/data/useCalendarEvents";
-import { REPEAT_TO_RRULE, rruleToRepeatOption } from "@/modules/calendar/types";
+import { frequencyToRRule, rruleToFrequency } from "@/modules/calendar/types";
 import { LinkEntityButton } from "@/core/links/LinkEntityButton";
 import { LinkedItemsSection } from "@/core/links/LinkedItemsSection";
 import { useScheduleReminder } from "@/core/notifications/useScheduleReminder";
@@ -51,7 +51,7 @@ export function EventDetailScreen({ id }: { id: string }) {
     date: startsAt,
     startTime: `${String(startsAt.getHours()).padStart(2, "0")}:${startsAt.getMinutes() < 30 ? "00" : "30"}`,
     endTime: `${String(endsAt.getHours()).padStart(2, "0")}:${endsAt.getMinutes() < 30 ? "00" : "30"}`,
-    repeat: rruleToRepeatOption(event.rrule),
+    repeat: rruleToFrequency(event.rrule),
     color: event.color,
   };
 
@@ -82,7 +82,7 @@ export function EventDetailScreen({ id }: { id: string }) {
                   all_day: values.allDay,
                   starts_at: startsAtNext.toISOString(),
                   ends_at: (endsAtNext < startsAtNext ? startsAtNext : endsAtNext).toISOString(),
-                  rrule: values.repeat === "none" ? null : REPEAT_TO_RRULE[values.repeat],
+                  rrule: frequencyToRRule(values.repeat),
                   color: values.color,
                 },
               });
