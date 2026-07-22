@@ -1027,6 +1027,86 @@ export type Database = {
           },
         ]
       }
+      trip_items: {
+        Row: {
+          created_at: string
+          details: string | null
+          done: boolean
+          id: string
+          title: string
+          trip_id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          done?: boolean
+          id?: string
+          title: string
+          trip_id: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          done?: boolean
+          id?: string
+          title?: string
+          trip_id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_items_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trips: {
+        Row: {
+          color: string
+          created_at: string
+          destination: string | null
+          end_date: string
+          id: string
+          name: string
+          notes: string | null
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          destination?: string | null
+          end_date: string
+          id?: string
+          name: string
+          notes?: string | null
+          start_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          destination?: string | null
+          end_date?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          start_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_modules: {
         Row: {
           enabled: boolean

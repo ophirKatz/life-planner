@@ -9,6 +9,7 @@ import {
   ListTodo,
   Mountain,
   Package,
+  Plane,
   ShoppingCart,
   Sparkles,
   Users,
@@ -35,6 +36,7 @@ const iconMap: Record<string, LucideIcon> = {
   "cloud-sun": CloudSun,
   wallet: Wallet,
   dumbbell: Dumbbell,
+  plane: Plane,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {
