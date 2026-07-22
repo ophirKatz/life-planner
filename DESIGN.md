@@ -244,6 +244,12 @@ interface ModuleDefinition {
   a **Pro badge** where `tier = 'pro'`. Enable/disable toggles `user_modules.enabled`.
 - Enabling a `pro` module (or exceeding free limits) routes through the **paywall**.
 - Home dashboard renders `dashboardWidgets` only for enabled modules, in user order.
+- `modules.is_active` is a separate, non-billing **kill switch**: the developer can hide
+  any module app-wide (new installs *and* users who already had it enabled) by flipping
+  it off, independent of tier. `useModulesCatalog` filters it for Store listing;
+  `useEnabledModules`/`useIsModuleEnabled` (`core/modules/hooks.ts`) also check it on
+  every read so it takes effect immediately for existing installs, not just new ones;
+  `enforce_module_limits` rejects a direct enable attempt server-side too.
 
 ### 5.3 Folder layout
 ```
@@ -368,18 +374,31 @@ Merchant-of-Record (e.g. Paddle) rather than a local gateway or Stripe.
   `subscriptions`.
 
 ### 7.3 Gating strategy (free vs Pro)
+Free-tier modules (always available, no cap on enabling all of them together):
+**Tasks, Calendar, People, Shopping**. Every other module — Habits included — is
+`pro`-tier. Gating is purely per-module tier now, not a count: there's no flat
+"N enabled modules" ceiling to trip while a free user is just using what their plan
+already includes.
+
 | Limit | Free | Pro |
 |---|---|---|
-| Enabled modules | 3 | unlimited |
-| Connected accounts | 1 | unlimited |
-| `pro`-tier modules | locked | unlocked |
+| Free-tier modules (Tasks, Calendar, People, Shopping) | all enabled | all enabled |
+| `pro`-tier modules (Habits, …) | locked | unlocked |
+| Pro features inside a free module (e.g. AI summaries in People) | locked | unlocked |
+| Connected accounts | 2 | unlimited |
 | Sync frequency | standard | (optional) higher |
 | History / analytics | basic | full |
 
 - **Enforce on server**, not just UI: RLS policies (or `SECURITY DEFINER` guard
-  functions) that reject a 4th `user_modules.enabled=true` or a 2nd
-  `connected_accounts` unless `subscriptions.is_pro`. UI hides/locks for UX; the DB is
-  the backstop.
+  functions) that reject enabling a `pro`-tier module or a 3rd `connected_accounts` row
+  unless `subscriptions.is_pro`. UI hides/locks for UX; the DB is the backstop.
+- **Feature-level gates** (a pro feature living inside an otherwise-free module, e.g.
+  AI-generated summaries) are checked where that feature's request is handled — an Edge
+  Function reading `subscriptions.is_pro` before calling the model — not via the
+  module-level `enforce_module_limits` trigger, which only governs whether the module
+  itself can be enabled at all.
+- `modules.is_active` (§5.2) is a distinct, non-billing kill switch — not part of this
+  gating table, since it isn't a plan limit.
 - **Paywall triggers:** enabling a locked module, exceeding a limit, opening a Pro
   feature. Use RevenueCat's paywall component, themed to match the design system.
 

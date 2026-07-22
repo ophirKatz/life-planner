@@ -8,7 +8,7 @@ export const habitsModule: ModuleDefinition = {
   slug: "habits",
   name: "Habits",
   icon: Flame,
-  tier: "free",
+  tier: "pro",
   routes: [{ path: "habits", title: "Habits" }],
   dashboardWidgets: [HabitsWidget],
   quickAddActions: [
