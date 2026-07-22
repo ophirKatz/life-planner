@@ -14,6 +14,7 @@ import { peopleModule } from "@/modules/people/definition";
 import { recipesModule } from "@/modules/recipes/definition";
 import { shoppingModule } from "@/modules/shopping/definition";
 import { tasksModule } from "@/modules/tasks/definition";
+import { weatherModule } from "@/modules/weather/definition";
 import { wishlistsModule } from "@/modules/wishlists/definition";
 
 const modules = [
@@ -27,6 +28,7 @@ const modules = [
   focusModule,
   recipesModule,
   climbingModule,
+  weatherModule,
 ];
 
 modules.forEach((mod) => {

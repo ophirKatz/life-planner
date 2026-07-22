@@ -997,6 +997,36 @@ export type Database = {
           },
         ]
       }
+      weather_settings: {
+        Row: {
+          created_at: string
+          id: string
+          location_lat: number
+          location_lng: number
+          location_label: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location_lat: number
+          location_lng: number
+          location_label: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location_lat?: number
+          location_lng?: number
+          location_label?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       wishlist_items: {
         Row: {
           created_at: string

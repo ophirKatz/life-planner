@@ -2,6 +2,7 @@ import {
   Bookmark,
   Calendar,
   ChefHat,
+  CloudSun,
   Flame,
   Lightbulb,
   ListTodo,
@@ -29,6 +30,7 @@ const iconMap: Record<string, LucideIcon> = {
   zap: Zap,
   "chef-hat": ChefHat,
   mountain: Mountain,
+  "cloud-sun": CloudSun,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {
