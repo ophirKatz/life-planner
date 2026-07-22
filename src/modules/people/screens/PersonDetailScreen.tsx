@@ -5,7 +5,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { LinkEntityButton } from "@/core/links/LinkEntityButton";
 import { LinkedItemsSection } from "@/core/links/LinkedItemsSection";
+import { InteractionsSection } from "@/modules/people/components/InteractionsSection";
 import { PersonForm } from "@/modules/people/components/PersonForm";
+import { PersonSummaryCard } from "@/modules/people/components/PersonSummaryCard";
 import { useDeletePerson, usePerson, useUpdatePerson } from "@/modules/people/data/usePeople";
 import { Button } from "@/core/ui/Button";
 import { EmptyState } from "@/core/ui/EmptyState";
@@ -81,6 +83,10 @@ export function PersonDetailScreen({ id }: { id: string }) {
         </View>
 
         <LinkedItemsSection entityType="person" entityId={person.id} />
+
+        <PersonSummaryCard personId={person.id} />
+
+        <InteractionsSection personId={person.id} />
 
         <Button
           label="Delete contact"
