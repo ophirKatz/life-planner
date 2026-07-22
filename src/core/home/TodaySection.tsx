@@ -12,7 +12,8 @@ import { useTasks, useToggleTaskDone } from "@/modules/tasks/data/useTasks";
 import type { TaskRow } from "@/modules/tasks/types";
 import { useIsModuleEnabled } from "@/core/modules/hooks";
 import { Card } from "@/core/ui/Card";
-import { Checkbox } from "@/core/ui/Checkbox";
+import { cn } from "@/core/ui/lib/utils";
+import { ListRow } from "@/core/ui/ListRow";
 import { Skeleton } from "@/core/ui/Skeleton";
 import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
@@ -60,38 +61,43 @@ function TaskMiniRow({ task }: { task: TaskRow }) {
   const timed = !!task.due_at && taskHasTime(task.due_at);
 
   return (
-    <View className="flex-row items-center gap-2.5">
-      <Checkbox checked={false} onCheckedChange={() => toggleDone.mutate(task)} />
-      {task.priority > 0 ? (
-        <View className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: priorityColor[task.priority] }} />
-      ) : null}
-      <Text
-        className={`text-sm flex-1 ${overdue ? "text-danger" : "text-foreground"}`}
-        numberOfLines={1}
-      >
-        {task.title}
-      </Text>
-      {overdue ? <AlertCircle size={13} color={colors.danger} /> : null}
-      {timed ? (
-        <Text className={`text-xs shrink-0 ${overdue ? "text-danger font-medium" : "text-muted-foreground"}`}>
-          {format(dueDate!, "p")}
-        </Text>
-      ) : null}
-    </View>
+    <ListRow
+      className="px-0 py-0 bg-transparent gap-2.5"
+      leading={{ type: "checkbox", checked: false, onToggle: () => toggleDone.mutate(task) }}
+      leadingExtra={
+        task.priority > 0 ? (
+          <View className="h-1.5 w-1.5 rounded-full shrink-0" style={{ backgroundColor: priorityColor[task.priority] }} />
+        ) : null
+      }
+      title={task.title}
+      titleClassName={cn("text-sm", overdue ? "text-danger" : "text-foreground")}
+      trailing={
+        <View className="flex-row items-center gap-1 shrink-0">
+          {overdue ? <AlertCircle size={13} color={colors.danger} /> : null}
+          {timed ? (
+            <Text className={`text-xs ${overdue ? "text-danger font-medium" : "text-muted-foreground"}`}>
+              {format(dueDate!, "p")}
+            </Text>
+          ) : null}
+        </View>
+      }
+    />
   );
 }
 
 function EventMiniRow({ event }: { event: CalendarEventRow }) {
   return (
-    <View className="flex-row items-center gap-2.5">
-      <View className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: event.color }} />
-      <Text className="text-sm text-foreground flex-1" numberOfLines={1}>
-        {event.title}
-      </Text>
-      <Text className="text-xs text-muted-foreground shrink-0">
-        {event.all_day ? "All day" : format(new Date(event.starts_at), "p")}
-      </Text>
-    </View>
+    <ListRow
+      className="px-0 py-0 bg-transparent gap-2.5"
+      leading={{ type: "dot", color: event.color }}
+      title={event.title}
+      titleClassName="text-sm"
+      trailing={
+        <Text className="text-xs text-muted-foreground shrink-0">
+          {event.all_day ? "All day" : format(new Date(event.starts_at), "p")}
+        </Text>
+      }
+    />
   );
 }
 

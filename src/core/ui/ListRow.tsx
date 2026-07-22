@@ -1,5 +1,4 @@
 import type { LucideIcon } from "lucide-react-native";
-import { Trash2 } from "lucide-react-native";
 import { Pressable, Text, View } from "react-native";
 
 import { Checkbox } from "@/core/ui/Checkbox";
@@ -11,6 +10,15 @@ export type ListRowLeading =
   | { type: "checkbox"; checked: boolean; onToggle: () => void; disabled?: boolean; accessibilityLabel?: string }
   | { type: "dot"; color: string }
   | { type: "icon"; icon: LucideIcon };
+
+export interface ListRowSwipeAction {
+  label: string;
+  icon: LucideIcon;
+  /** Defaults to SwipeableRow's own default (success/green) — pass
+   * "bg-danger" for a destructive action like delete. */
+  colorClassName?: string;
+  onTrigger: () => void;
+}
 
 export interface ListRowProps {
   leading?: ListRowLeading;
@@ -24,7 +32,9 @@ export interface ListRowProps {
   subtitle?: string;
   trailing?: React.ReactNode;
   onPress?: () => void;
-  swipeDelete?: { label: string; onDelete: () => void };
+  /** Full right-swipe triggers this — not necessarily destructive (e.g.
+   * "mark done"), see colorClassName. */
+  swipeAction?: ListRowSwipeAction;
   className?: string;
 }
 
@@ -41,7 +51,7 @@ export function ListRow({
   subtitle,
   trailing,
   onPress,
-  swipeDelete,
+  swipeAction,
   className,
 }: ListRowProps) {
   const colors = useThemeColors();
@@ -92,10 +102,15 @@ export function ListRow({
     </Pressable>
   );
 
-  if (!swipeDelete) return row;
+  if (!swipeAction) return row;
 
   return (
-    <SwipeableRow actionLabel={swipeDelete.label} actionIcon={Trash2} actionColorClassName="bg-danger" onTrigger={swipeDelete.onDelete}>
+    <SwipeableRow
+      actionLabel={swipeAction.label}
+      actionIcon={swipeAction.icon}
+      actionColorClassName={swipeAction.colorClassName}
+      onTrigger={swipeAction.onTrigger}
+    >
       {row}
     </SwipeableRow>
   );

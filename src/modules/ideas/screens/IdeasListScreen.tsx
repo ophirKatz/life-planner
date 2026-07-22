@@ -1,13 +1,14 @@
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import { Lightbulb, Plus } from "lucide-react-native";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useIdeas } from "@/modules/ideas/data/useIdeas";
 import type { IdeaRow, IdeaStatus } from "@/modules/ideas/types";
 import { Button } from "@/core/ui/Button";
 import { EmptyState } from "@/core/ui/EmptyState";
+import { ListRow } from "@/core/ui/ListRow";
 import { SkeletonListItem } from "@/core/ui/Skeleton";
 
 const STATUS_LABEL: Record<IdeaStatus, string> = {
@@ -29,23 +30,13 @@ function IdeaRowItem({ idea }: { idea: IdeaRow }) {
   const status = idea.status as IdeaStatus;
 
   return (
-    <Pressable
-      className="flex-row items-center gap-3 bg-bg px-6 py-3.5 active:opacity-70"
+    <ListRow
+      leading={{ type: "dot", color: STATUS_COLOR[status] }}
+      title={idea.title}
+      subtitle={idea.tags.length > 0 ? idea.tags.join(", ") : undefined}
+      trailing={<Text className="text-xs text-muted-foreground shrink-0">{STATUS_LABEL[status]}</Text>}
       onPress={() => router.push(`/modules/ideas/${idea.id}`)}
-    >
-      <View className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: STATUS_COLOR[status] }} />
-      <View className="flex-1">
-        <Text className="text-base text-foreground" numberOfLines={1}>
-          {idea.title}
-        </Text>
-        {idea.tags.length > 0 ? (
-          <Text className="text-xs text-muted-foreground" numberOfLines={1}>
-            {idea.tags.join(", ")}
-          </Text>
-        ) : null}
-      </View>
-      <Text className="text-xs text-muted-foreground shrink-0">{STATUS_LABEL[status]}</Text>
-    </Pressable>
+    />
   );
 }
 

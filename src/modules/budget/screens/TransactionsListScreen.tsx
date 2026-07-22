@@ -2,7 +2,7 @@ import { FlashList } from "@shopify/flash-list";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
 import { Plus, Trash2, Wallet } from "lucide-react-native";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useBudgetCategories } from "@/modules/budget/data/useBudgetCategories";
@@ -11,32 +11,29 @@ import type { TransactionRow } from "@/modules/budget/types";
 import { Button } from "@/core/ui/Button";
 import { Card } from "@/core/ui/Card";
 import { EmptyState } from "@/core/ui/EmptyState";
+import { ListRow } from "@/core/ui/ListRow";
 import { SkeletonListItem } from "@/core/ui/Skeleton";
-import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 function TransactionRowItem({ transaction, categoryName }: { transaction: TransactionRow; categoryName?: string }) {
   const deleteTransaction = useDeleteTransaction();
-  const colors = useThemeColors();
   const isExpense = transaction.type === "expense";
 
   return (
-    <View className="flex-row items-center gap-3 bg-bg px-6 py-3">
-      <View className="flex-1">
-        <Text className="text-base text-foreground" numberOfLines={1}>
-          {transaction.note || categoryName || (isExpense ? "Expense" : "Income")}
+    <ListRow
+      title={transaction.note || categoryName || (isExpense ? "Expense" : "Income")}
+      subtitle={`${format(new Date(transaction.occurred_at), "MMM d")}${categoryName ? ` · ${categoryName}` : ""}`}
+      trailing={
+        <Text className={`text-base font-medium ${isExpense ? "text-danger" : "text-accent"}`}>
+          {isExpense ? "-" : "+"}${transaction.amount.toFixed(2)}
         </Text>
-        <Text className="text-xs text-muted-foreground">
-          {format(new Date(transaction.occurred_at), "MMM d")}
-          {categoryName ? ` · ${categoryName}` : ""}
-        </Text>
-      </View>
-      <Text className={`text-base font-medium ${isExpense ? "text-danger" : "text-accent"}`}>
-        {isExpense ? "-" : "+"}${transaction.amount.toFixed(2)}
-      </Text>
-      <Pressable hitSlop={8} onPress={() => deleteTransaction.mutate(transaction.id)}>
-        <Trash2 size={16} color={colors.mutedForeground} />
-      </Pressable>
-    </View>
+      }
+      swipeAction={{
+        label: "Delete",
+        icon: Trash2,
+        colorClassName: "bg-danger",
+        onTrigger: () => deleteTransaction.mutate(transaction.id),
+      }}
+    />
   );
 }
 
