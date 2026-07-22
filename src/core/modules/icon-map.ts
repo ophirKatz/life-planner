@@ -1,4 +1,5 @@
 import {
+  Bookmark,
   Calendar,
   Flame,
   Lightbulb,
@@ -21,6 +22,7 @@ const iconMap: Record<string, LucideIcon> = {
   "shopping-cart": ShoppingCart,
   sparkles: Sparkles,
   lightbulb: Lightbulb,
+  bookmark: Bookmark,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {

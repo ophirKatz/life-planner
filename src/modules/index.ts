@@ -11,8 +11,17 @@ import { ideasModule } from "@/modules/ideas/definition";
 import { peopleModule } from "@/modules/people/definition";
 import { shoppingModule } from "@/modules/shopping/definition";
 import { tasksModule } from "@/modules/tasks/definition";
+import { wishlistsModule } from "@/modules/wishlists/definition";
 
-const modules = [tasksModule, calendarModule, peopleModule, habitsModule, shoppingModule, ideasModule];
+const modules = [
+  tasksModule,
+  calendarModule,
+  peopleModule,
+  habitsModule,
+  shoppingModule,
+  ideasModule,
+  wishlistsModule,
+];
 
 modules.forEach((mod) => {
   registerModule(mod);
