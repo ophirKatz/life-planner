@@ -10,6 +10,7 @@ import { focusModule } from "@/modules/focus/definition";
 import { habitsModule } from "@/modules/habits/definition";
 import { ideasModule } from "@/modules/ideas/definition";
 import { peopleModule } from "@/modules/people/definition";
+import { recipesModule } from "@/modules/recipes/definition";
 import { shoppingModule } from "@/modules/shopping/definition";
 import { tasksModule } from "@/modules/tasks/definition";
 import { wishlistsModule } from "@/modules/wishlists/definition";
@@ -23,6 +24,7 @@ const modules = [
   ideasModule,
   wishlistsModule,
   focusModule,
+  recipesModule,
 ];
 
 modules.forEach((mod) => {
