@@ -24,6 +24,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      budget_categories: {
+        Row: {
+          created_at: string
+          id: string
+          monthly_limit: number | null
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          monthly_limit?: number | null
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          monthly_limit?: number | null
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       calendar_events: {
         Row: {
           account_id: string | null
@@ -952,6 +979,50 @@ export type Database = {
             columns: ["list_id"]
             isOneToOne: false
             referencedRelation: "task_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          amount: number
+          category_id: string | null
+          created_at: string
+          id: string
+          note: string | null
+          occurred_at: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          note?: string | null
+          occurred_at?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "budget_categories"
             referencedColumns: ["id"]
           },
         ]

@@ -5,6 +5,7 @@
 import { registerAutomations } from "@/core/events/runner";
 import { registerLinkable } from "@/core/links/registry";
 import { registerModule } from "@/core/modules/registry";
+import { budgetModule } from "@/modules/budget/definition";
 import { calendarModule } from "@/modules/calendar/definition";
 import { climbingModule } from "@/modules/climbing/definition";
 import { focusModule } from "@/modules/focus/definition";
@@ -29,6 +30,7 @@ const modules = [
   recipesModule,
   climbingModule,
   weatherModule,
+  budgetModule,
 ];
 
 modules.forEach((mod) => {
