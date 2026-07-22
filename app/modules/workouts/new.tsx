@@ -1,12 +1,15 @@
 import { Stack } from "expo-router";
 
 import { NewWorkoutScreen } from "@/modules/workouts/screens/NewWorkoutScreen";
+import { RouteSheet } from "@/core/ui/RouteSheet";
 
 export default function Screen() {
   return (
     <>
-      <Stack.Screen options={{ title: "New Workout", presentation: "modal" }} />
-      <NewWorkoutScreen />
+      <Stack.Screen options={{ headerShown: false, presentation: "transparentModal", animation: "none" }} />
+      <RouteSheet>
+        <NewWorkoutScreen />
+      </RouteSheet>
     </>
   );
 }

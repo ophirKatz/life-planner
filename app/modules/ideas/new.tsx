@@ -1,12 +1,15 @@
 import { Stack } from "expo-router";
 
 import { NewIdeaScreen } from "@/modules/ideas/screens/NewIdeaScreen";
+import { RouteSheet } from "@/core/ui/RouteSheet";
 
 export default function Screen() {
   return (
     <>
-      <Stack.Screen options={{ title: "New Idea", presentation: "modal" }} />
-      <NewIdeaScreen />
+      <Stack.Screen options={{ headerShown: false, presentation: "transparentModal", animation: "none" }} />
+      <RouteSheet>
+        <NewIdeaScreen />
+      </RouteSheet>
     </>
   );
 }

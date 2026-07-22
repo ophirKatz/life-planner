@@ -8,22 +8,22 @@ import { z } from "zod";
 import { useBudgetCategories, useCreateBudgetCategory } from "@/modules/budget/data/useBudgetCategories";
 import type { TransactionType } from "@/modules/budget/types";
 import { Button } from "@/core/ui/Button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/core/ui/Dialog";
 import { Input } from "@/core/ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/core/ui/Select";
+import { Sheet, SheetContent, SheetTrigger } from "@/core/ui/Sheet";
 
-function NewCategoryDialog() {
+function NewCategorySheet() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const createCategory = useCreateBudgetCategory();
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
         <Button label="New category" size="sm" variant="secondary" />
-      </DialogTrigger>
-      <DialogContent>
-        <DialogTitle>New budget category</DialogTitle>
+      </SheetTrigger>
+      <SheetContent>
+        <Text className="text-lg font-semibold text-foreground text-center">New budget category</Text>
         <Input value={name} onChangeText={setName} placeholder="e.g. Groceries" autoFocus />
         <Button
           label="Create"
@@ -36,8 +36,8 @@ function NewCategoryDialog() {
             )
           }
         />
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 }
 
@@ -139,7 +139,7 @@ export function TransactionForm({ defaultValues, onSubmit, isSubmitting, submitL
             <View className="gap-1.5">
               <View className="flex-row items-center justify-between">
                 <Text className="text-sm font-medium text-foreground">Category</Text>
-                <NewCategoryDialog />
+                <NewCategorySheet />
               </View>
               <Select
                 value={selected ? { value: selected.id, label: selected.name } : undefined}

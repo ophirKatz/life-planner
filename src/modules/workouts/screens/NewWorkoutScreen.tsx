@@ -1,6 +1,5 @@
 import { useRouter } from "expo-router";
-import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Text } from "react-native";
 
 import { WorkoutForm } from "@/modules/workouts/components/WorkoutForm";
 import { useCreateWorkout } from "@/modules/workouts/data/useWorkouts";
@@ -17,26 +16,24 @@ export function NewWorkoutScreen() {
   const createWorkout = useCreateWorkout();
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 bg-bg">
-      <View className="px-6 pt-4 pb-6">
-        <Text className="text-2xl font-semibold text-foreground mb-6">Log a workout</Text>
-        <WorkoutForm
-          submitLabel="Save workout"
-          isSubmitting={createWorkout.isPending}
-          defaultValues={{ type: "strength", duration_minutes: undefined, exercises: "", notes: "" }}
-          onSubmit={(values) => {
-            createWorkout.mutate(
-              {
-                type: values.type,
-                duration_minutes: values.duration_minutes ?? null,
-                exercises: parseLines(values.exercises),
-                notes: values.notes || null,
-              },
-              { onSuccess: () => router.back() }
-            );
-          }}
-        />
-      </View>
-    </SafeAreaView>
+    <>
+      <Text className="text-lg font-semibold text-foreground text-center mb-4">Log a workout</Text>
+      <WorkoutForm
+        submitLabel="Save workout"
+        isSubmitting={createWorkout.isPending}
+        defaultValues={{ type: "strength", duration_minutes: undefined, exercises: "", notes: "" }}
+        onSubmit={(values) => {
+          createWorkout.mutate(
+            {
+              type: values.type,
+              duration_minutes: values.duration_minutes ?? null,
+              exercises: parseLines(values.exercises),
+              notes: values.notes || null,
+            },
+            { onSuccess: () => router.back() }
+          );
+        }}
+      />
+    </>
   );
 }
