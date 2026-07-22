@@ -254,6 +254,36 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_flags: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          enabled: boolean
+          key: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description: string
+          enabled?: boolean
+          key: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          key?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       focus_summaries: {
         Row: {
           error: string | null
@@ -677,6 +707,7 @@ export type Database = {
           created_at: string
           display_name: string | null
           id: string
+          is_admin: boolean
           timezone: string
           updated_at: string
         }
@@ -685,6 +716,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id: string
+          is_admin?: boolean
           timezone?: string
           updated_at?: string
         }
@@ -693,6 +725,7 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          is_admin?: boolean
           timezone?: string
           updated_at?: string
         }

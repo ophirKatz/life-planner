@@ -66,7 +66,10 @@ function rather than starting from a blank file.
   other error string just shows as a normal failure. Use a plain message
   (no prefix) for anything that isn't a monetization gate, even if it's also
   a 4xx — e.g. `enforce_module_limits`'s inactive-module rejection uses
-  `MODULE_UNAVAILABLE:`, not `PAYWALL:`, because upgrading wouldn't fix it.
+  `MODULE_UNAVAILABLE:`, not `PAYWALL:`, because upgrading wouldn't fix it. The
+  AI functions additionally check the `feature_flags` table (admin-controlled
+  kill switch, independent of subscription) and use `FEATURE_DISABLED:` the
+  same way — see `summarize-person-interactions` for the pattern.
 - **Caching pattern for generate-on-demand AI results**
   (`summarize-person-interactions`, `generate-focus-summary`): a small table
   (`status`, `summary`/`error`, `generated_at`, unique on `(user_id, ...)`)

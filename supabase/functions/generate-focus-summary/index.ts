@@ -160,6 +160,18 @@ Deno.serve(async (req: Request) => {
       });
     }
 
+    const { data: flag } = await admin
+      .from("feature_flags")
+      .select("enabled")
+      .eq("key", "ai_focus_summary")
+      .maybeSingle();
+    if (flag && !flag.enabled) {
+      return new Response(
+        JSON.stringify({ error: "FEATURE_DISABLED: the Focus AI digest is temporarily unavailable" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const rangeStart = period === "tomorrow" ? dayRange(1).start : dayRange(0).start;
     const rangeEnd = period === "tomorrow" ? dayRange(1).end : dayRange(7).start;
 

@@ -40,6 +40,7 @@ function RootNavigator() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="modules" />
         <Stack.Screen name="integrations" options={{ headerShown: true, presentation: "modal" }} />
+        <Stack.Screen name="admin" options={{ headerShown: true, presentation: "modal" }} />
       </Stack.Protected>
     </Stack>
   );

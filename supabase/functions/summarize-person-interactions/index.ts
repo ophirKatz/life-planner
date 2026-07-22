@@ -43,6 +43,18 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    const { data: flag } = await admin
+      .from("feature_flags")
+      .select("enabled")
+      .eq("key", "ai_people_summary")
+      .maybeSingle();
+    if (flag && !flag.enabled) {
+      return new Response(
+        JSON.stringify({ error: "FEATURE_DISABLED: AI summaries are temporarily unavailable" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     if (!forceRefresh) {
       const { data: cached } = await admin
         .from("person_summaries")

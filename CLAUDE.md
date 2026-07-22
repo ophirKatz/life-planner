@@ -54,6 +54,15 @@ are gated where the feature is invoked, not at the module level.
 flip to hide a module app-wide, independent of tier — see
 `src/core/modules/hooks.ts`.
 
+## Admin dashboard
+
+`profiles.is_admin` (DESIGN.md §7.4) gates a `/admin` screen (linked from
+Profile, admins only) that toggles `modules.tier`/`is_active` and generic
+`feature_flags` rows — the same levers above, editable at runtime instead of
+via migration. Enforcement is two RLS policies calling `public.is_admin()`,
+not the screen; there's no seed admin, promotion is a manual SQL step (see
+`docs/setup-guide.md`).
+
 ## Non-negotiable rules
 
 - **RLS on every user-owned table**, default-deny, `auth.uid() = user_id`
