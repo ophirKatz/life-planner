@@ -2,13 +2,17 @@
 
 A cross-platform (iOS-first) Expo life-planner where you compose your dashboard
 from a marketplace of first-party feature modules — Tasks, Calendar, People,
-Habits, Shopping. Google Calendar sync and RevenueCat billing are first-class,
-cross-cutting infrastructure. Fully relational Supabase backend, multi-tenant
-and paywalled from day one.
+and Shopping are free; Habits and a growing set of pro modules (Focus,
+Recipes, Climbing, Weather, Budget, Workouts, Travel, Ideas, Wishlists) sit
+behind the paywall. Google Calendar sync and RevenueCat billing are
+first-class, cross-cutting infrastructure. Fully relational Supabase backend,
+multi-tenant and paywalled from day one.
 
 See [`DESIGN.md`](./DESIGN.md) for the full architecture spec and
 [`CLAUDE_CODE_PROMPT.md`](./CLAUDE_CODE_PROMPT.md) for the build plan this
-project followed, milestone by milestone.
+project followed, milestone by milestone. If you're an AI agent working in
+this repo, start at [`CLAUDE.md`](./CLAUDE.md) instead — it links to the
+[`docs/`](./docs) guides (design system, best practices, Edge Functions) too.
 
 ## Stack
 
@@ -61,13 +65,15 @@ Functions + `pg_cron`) · RevenueCat · `expo-notifications`.
      GOOGLE_OAUTH_CLIENT_ID=... \
      GOOGLE_OAUTH_CLIENT_SECRET=... \
      TOKEN_ENCRYPTION_KEY=$(openssl rand -base64 32) \
-     REVENUECAT_WEBHOOK_SECRET=...
+     REVENUECAT_WEBHOOK_SECRET=... \
+     ANTHROPIC_API_KEY=...
    ```
 
    `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` are
    injected automatically into every Edge Function — don't set them yourself.
 
-5. **Deploy Edge Functions**:
+5. **Deploy Edge Functions** — see [`docs/edge-functions.md`](./docs/edge-functions.md)
+   for what each one does:
 
    ```sh
    supabase functions deploy oauth-exchange
@@ -76,6 +82,10 @@ Functions + `pg_cron`) · RevenueCat · `expo-notifications`.
    supabase functions deploy google-disconnect
    supabase functions deploy revenuecat-webhook --no-verify-jwt
    supabase functions deploy send-notifications
+   supabase functions deploy summarize-person-interactions
+   supabase functions deploy generate-focus-summary
+   supabase functions deploy fetch-weather
+   supabase functions deploy search-weather-location
    ```
 
 6. **One-time Vault secret** for the `pg_cron` jobs (migrations 0009, 0011) to
