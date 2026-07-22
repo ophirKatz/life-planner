@@ -5,13 +5,37 @@
 import { registerAutomations } from "@/core/events/runner";
 import { registerLinkable } from "@/core/links/registry";
 import { registerModule } from "@/core/modules/registry";
+import { budgetModule } from "@/modules/budget/definition";
 import { calendarModule } from "@/modules/calendar/definition";
+import { climbingModule } from "@/modules/climbing/definition";
+import { focusModule } from "@/modules/focus/definition";
 import { habitsModule } from "@/modules/habits/definition";
+import { ideasModule } from "@/modules/ideas/definition";
 import { peopleModule } from "@/modules/people/definition";
+import { recipesModule } from "@/modules/recipes/definition";
 import { shoppingModule } from "@/modules/shopping/definition";
 import { tasksModule } from "@/modules/tasks/definition";
+import { travelModule } from "@/modules/travel/definition";
+import { weatherModule } from "@/modules/weather/definition";
+import { wishlistsModule } from "@/modules/wishlists/definition";
+import { workoutsModule } from "@/modules/workouts/definition";
 
-const modules = [tasksModule, calendarModule, peopleModule, habitsModule, shoppingModule];
+const modules = [
+  tasksModule,
+  calendarModule,
+  peopleModule,
+  habitsModule,
+  shoppingModule,
+  ideasModule,
+  wishlistsModule,
+  focusModule,
+  recipesModule,
+  climbingModule,
+  weatherModule,
+  budgetModule,
+  workoutsModule,
+  travelModule,
+];
 
 modules.forEach((mod) => {
   registerModule(mod);

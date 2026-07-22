@@ -62,7 +62,7 @@ export default function IntegrationsScreen() {
         {needsUpgrade ? (
           <View className="gap-2">
             <Text className="text-sm text-muted-foreground text-center">
-              The free plan includes 1 connected account. Upgrade to Pro to connect more.
+              The free plan includes up to 2 connected accounts. Upgrade to Pro to connect more.
             </Text>
             <Button label="Upgrade to Pro" onPress={() => presentPaywall()} />
           </View>

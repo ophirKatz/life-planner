@@ -1,16 +1,15 @@
 import { FlashList } from "@shopify/flash-list";
 import { useRouter } from "expo-router";
 import { Check, ListTodo, Plus } from "lucide-react-native";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useTasks, useToggleTaskDone } from "@/modules/tasks/data/useTasks";
 import type { TaskRow } from "@/modules/tasks/types";
 import { Button } from "@/core/ui/Button";
-import { Checkbox } from "@/core/ui/Checkbox";
 import { EmptyState } from "@/core/ui/EmptyState";
+import { ListRow } from "@/core/ui/ListRow";
 import { SkeletonListItem } from "@/core/ui/Skeleton";
-import { SwipeableRow } from "@/core/ui/SwipeableRow";
 
 const priorityColor = ["transparent", "#facc15", "#fb923c", "#ef4444"];
 
@@ -20,28 +19,18 @@ function TaskRowItem({ task }: { task: TaskRow }) {
   const isDone = task.status === "done";
 
   return (
-    <SwipeableRow actionLabel="Done" actionIcon={Check} onTrigger={() => toggleDone.mutate(task)}>
-      <Pressable
-        className="flex-row items-center gap-3 bg-bg px-6 py-3.5 active:opacity-70"
-        onPress={() => router.push(`/modules/tasks/${task.id}`)}
-      >
-        <Checkbox checked={isDone} onCheckedChange={() => toggleDone.mutate(task)} />
-        <View className="flex-1">
-          <Text
-            className={`text-base ${isDone ? "text-muted-foreground line-through" : "text-foreground"}`}
-            numberOfLines={1}
-          >
-            {task.title}
-          </Text>
-        </View>
-        {task.priority > 0 ? (
-          <View
-            className="h-2.5 w-2.5 rounded-full"
-            style={{ backgroundColor: priorityColor[task.priority] }}
-          />
-        ) : null}
-      </Pressable>
-    </SwipeableRow>
+    <ListRow
+      leading={{ type: "checkbox", checked: isDone, onToggle: () => toggleDone.mutate(task) }}
+      title={task.title}
+      titleDone={isDone}
+      trailing={
+        task.priority > 0 ? (
+          <View className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: priorityColor[task.priority] }} />
+        ) : null
+      }
+      onPress={() => router.push(`/modules/tasks/${task.id}`)}
+      swipeAction={{ label: "Done", icon: Check, onTrigger: () => toggleDone.mutate(task) }}
+    />
   );
 }
 

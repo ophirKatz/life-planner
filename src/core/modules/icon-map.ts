@@ -1,11 +1,20 @@
 import {
+  Bookmark,
   Calendar,
+  ChefHat,
+  CloudSun,
+  Dumbbell,
   Flame,
+  Lightbulb,
   ListTodo,
+  Mountain,
   Package,
+  Plane,
   ShoppingCart,
   Sparkles,
   Users,
+  Wallet,
+  Zap,
   type LucideIcon,
 } from "lucide-react-native";
 
@@ -19,6 +28,15 @@ const iconMap: Record<string, LucideIcon> = {
   flame: Flame,
   "shopping-cart": ShoppingCart,
   sparkles: Sparkles,
+  lightbulb: Lightbulb,
+  bookmark: Bookmark,
+  zap: Zap,
+  "chef-hat": ChefHat,
+  mountain: Mountain,
+  "cloud-sun": CloudSun,
+  wallet: Wallet,
+  dumbbell: Dumbbell,
+  plane: Plane,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {

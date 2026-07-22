@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import { ChevronDown, ChevronUp, ShoppingCart, Trash2 } from "lucide-react-native";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, Text, View } from "react-native";
+import { KeyboardAvoidingView, Platform, Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
@@ -13,11 +13,10 @@ import {
 } from "@/modules/shopping/data/useShoppingItems";
 import type { ShoppingItemRow } from "@/modules/shopping/types";
 import { Button } from "@/core/ui/Button";
-import { Checkbox } from "@/core/ui/Checkbox";
 import { EmptyState } from "@/core/ui/EmptyState";
 import { Input } from "@/core/ui/Input";
+import { ListRow } from "@/core/ui/ListRow";
 import { SkeletonListItem } from "@/core/ui/Skeleton";
-import { SwipeableRow } from "@/core/ui/SwipeableRow";
 import { useThemeColors } from "@/core/ui/theme/useThemeColors";
 
 export function ShoppingItemsScreen({ listId }: { listId: string }) {
@@ -109,28 +108,17 @@ function ShoppingItemRowView({
 }) {
   const colors = useThemeColors();
   return (
-    <SwipeableRow
-      actionLabel="Remove"
-      actionIcon={Trash2}
-      actionColorClassName="bg-danger"
-      onTrigger={onDelete}
-    >
-      <View className="flex-row items-center gap-3 bg-bg px-6 py-3">
-        <Checkbox
-          checked={item.checked}
-          onCheckedChange={onToggle}
-          accessibilityLabel={`Mark ${item.name} as ${item.checked ? "not bought" : "bought"}`}
-        />
-        <View className="flex-1">
-          <Text
-            className={`text-base ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}
-          >
-            {item.name}
-          </Text>
-          {item.category ? (
-            <Text className="text-xs text-muted-foreground">{item.category}</Text>
-          ) : null}
-        </View>
+    <ListRow
+      leading={{
+        type: "checkbox",
+        checked: item.checked,
+        onToggle,
+        accessibilityLabel: `Mark ${item.name} as ${item.checked ? "not bought" : "bought"}`,
+      }}
+      title={item.name}
+      titleDone={item.checked}
+      subtitle={item.category ?? undefined}
+      trailing={
         <View className="gap-0.5">
           <Pressable
             disabled={!previous}
@@ -151,7 +139,8 @@ function ShoppingItemRowView({
             <ChevronDown size={18} color={next ? colors.mutedForeground : "transparent"} />
           </Pressable>
         </View>
-      </View>
-    </SwipeableRow>
+      }
+      swipeAction={{ label: "Remove", icon: Trash2, colorClassName: "bg-danger", onTrigger: onDelete }}
+    />
   );
 }

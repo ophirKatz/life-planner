@@ -6,6 +6,8 @@ import { z } from "zod";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
 import { cn } from "@/core/ui/lib/utils";
+import { NumberStepper } from "@/core/ui/NumberStepper";
+import { OptionButtonGroup } from "@/core/ui/OptionButtonGroup";
 
 const CADENCES = [
   { value: "daily", label: "Daily" },
@@ -69,18 +71,7 @@ export function HabitForm({ defaultValues, onSubmit, isSubmitting, submitLabel }
         render={({ field }) => (
           <View className="gap-1.5">
             <Text className="text-sm font-medium text-foreground">Cadence</Text>
-            <View className="flex-row gap-2">
-              {CADENCES.map((c) => (
-                <Button
-                  key={c.value}
-                  label={c.label}
-                  size="sm"
-                  variant={field.value === c.value ? "default" : "secondary"}
-                  className="flex-1"
-                  onPress={() => field.onChange(c.value)}
-                />
-              ))}
-            </View>
+            <OptionButtonGroup options={CADENCES} value={field.value} onChange={field.onChange} equalWidth />
           </View>
         )}
       />
@@ -89,26 +80,7 @@ export function HabitForm({ defaultValues, onSubmit, isSubmitting, submitLabel }
         control={control}
         name="target_per_period"
         render={({ field }) => (
-          <View className="gap-1.5">
-            <Text className="text-sm font-medium text-foreground">Target per period</Text>
-            <View className="flex-row items-center gap-4">
-              <Button
-                size="icon"
-                variant="secondary"
-                label="-"
-                onPress={() => field.onChange(Math.max(1, field.value - 1))}
-              />
-              <Text className="text-lg font-semibold text-foreground tabular-nums w-6 text-center">
-                {field.value}
-              </Text>
-              <Button
-                size="icon"
-                variant="secondary"
-                label="+"
-                onPress={() => field.onChange(Math.min(20, field.value + 1))}
-              />
-            </View>
-          </View>
+          <NumberStepper label="Target per period" value={field.value} onChange={field.onChange} min={1} max={20} />
         )}
       />
 
