@@ -5,11 +5,11 @@ import { Pressable, Text, View } from "react-native";
 import { z } from "zod";
 
 import { MiniMonthCalendar } from "@/modules/calendar/components/MiniMonthCalendar";
-import { TimeSelect } from "@/modules/calendar/components/TimeSelect";
 import type { RepeatOption } from "@/modules/calendar/types";
 import { Button } from "@/core/ui/Button";
 import { Input } from "@/core/ui/Input";
 import { cn } from "@/core/ui/lib/utils";
+import { TimeSelect } from "@/core/ui/TimeSelect";
 
 const REPEAT_OPTIONS: { value: RepeatOption; label: string }[] = [
   { value: "none", label: "Never" },

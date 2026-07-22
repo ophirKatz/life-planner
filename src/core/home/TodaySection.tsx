@@ -46,11 +46,18 @@ function SectionHeader({ title, viewAllHref }: { title: string; viewAllHref?: ()
   );
 }
 
+// A due_at at exactly midnight means "due this day, no specific time" — see
+// the same convention in TaskForm, which is the only place that sets it.
+function taskHasTime(iso: string): boolean {
+  return format(new Date(iso), "HH:mm") !== "00:00";
+}
+
 function TaskMiniRow({ task }: { task: TaskRow }) {
   const toggleDone = useToggleTaskDone();
   const colors = useThemeColors();
   const dueDate = task.due_at ? new Date(task.due_at) : null;
   const overdue = !!dueDate && !isToday(dueDate) && isPast(dueDate);
+  const timed = !!task.due_at && taskHasTime(task.due_at);
 
   return (
     <View className="flex-row items-center gap-2.5">
@@ -65,6 +72,11 @@ function TaskMiniRow({ task }: { task: TaskRow }) {
         {task.title}
       </Text>
       {overdue ? <AlertCircle size={13} color={colors.danger} /> : null}
+      {timed ? (
+        <Text className={`text-xs shrink-0 ${overdue ? "text-danger font-medium" : "text-muted-foreground"}`}>
+          {format(dueDate!, "p")}
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -122,22 +134,25 @@ export function TodaySection() {
 
   const todaysEvents = events ?? [];
 
-  // Tasks only carry a date (no time-of-day) in this app today, so the
-  // countdown banner can only be driven by real calendar-event start times.
-  const nextEvent = todaysEvents
-    .filter((e) => !e.all_day)
-    .map((e) => ({ event: e, minutes: differenceInMinutes(new Date(e.starts_at), now) }))
-    .filter((e) => e.minutes >= 0 && e.minutes <= NEXT_UP_WINDOW_MINUTES)
+  const nextUp = [
+    ...todaysEvents
+      .filter((e) => !e.all_day)
+      .map((e) => ({ label: e.title, minutes: differenceInMinutes(new Date(e.starts_at), now) })),
+    ...dueTasks
+      .filter((t) => taskHasTime(t.due_at!))
+      .map((t) => ({ label: t.title, minutes: differenceInMinutes(new Date(t.due_at!), now) })),
+  ]
+    .filter((c) => c.minutes >= 0 && c.minutes <= NEXT_UP_WINDOW_MINUTES)
     .sort((a, b) => a.minutes - b.minutes)[0];
 
-  const urgency = !nextEvent ? null : nextEvent.minutes <= 15 ? "high" : nextEvent.minutes <= 60 ? "medium" : "low";
+  const urgency = !nextUp ? null : nextUp.minutes <= 15 ? "high" : nextUp.minutes <= 60 ? "medium" : "low";
   const urgencyColor = urgency === "high" ? colors.danger : urgency === "medium" ? "#d97706" : colors.accent;
 
   return (
     <Card className="gap-4">
       <Text className="text-base font-semibold text-foreground">Today</Text>
 
-      {nextEvent ? (
+      {nextUp ? (
         <View
           className="flex-row items-center gap-3 rounded-xl p-3 border"
           style={{ backgroundColor: `${urgencyColor}1a`, borderColor: `${urgencyColor}4d` }}
@@ -146,11 +161,11 @@ export function TodaySection() {
           <View className="flex-1">
             <Text className="text-xs text-muted-foreground">Next up</Text>
             <Text className="text-sm font-medium text-foreground" numberOfLines={1}>
-              {nextEvent.event.title}
+              {nextUp.label}
             </Text>
           </View>
           <Text className="text-sm font-semibold text-foreground shrink-0">
-            in {formatCountdown(nextEvent.minutes)}
+            in {formatCountdown(nextUp.minutes)}
           </Text>
         </View>
       ) : null}
