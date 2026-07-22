@@ -1,6 +1,7 @@
 import {
   Calendar,
   Flame,
+  Lightbulb,
   ListTodo,
   Package,
   ShoppingCart,
@@ -19,6 +20,7 @@ const iconMap: Record<string, LucideIcon> = {
   flame: Flame,
   "shopping-cart": ShoppingCart,
   sparkles: Sparkles,
+  lightbulb: Lightbulb,
 };
 
 export function getModuleIcon(icon: string): LucideIcon {

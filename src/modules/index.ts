@@ -7,11 +7,12 @@ import { registerLinkable } from "@/core/links/registry";
 import { registerModule } from "@/core/modules/registry";
 import { calendarModule } from "@/modules/calendar/definition";
 import { habitsModule } from "@/modules/habits/definition";
+import { ideasModule } from "@/modules/ideas/definition";
 import { peopleModule } from "@/modules/people/definition";
 import { shoppingModule } from "@/modules/shopping/definition";
 import { tasksModule } from "@/modules/tasks/definition";
 
-const modules = [tasksModule, calendarModule, peopleModule, habitsModule, shoppingModule];
+const modules = [tasksModule, calendarModule, peopleModule, habitsModule, shoppingModule, ideasModule];
 
 modules.forEach((mod) => {
   registerModule(mod);
