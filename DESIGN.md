@@ -402,6 +402,38 @@ already includes.
 - **Paywall triggers:** enabling a locked module, exceeding a limit, opening a Pro
   feature. Use RevenueCat's paywall component, themed to match the design system.
 
+### 7.4 Admin control plane
+`profiles.is_admin` (default `false`) marks an account as an admin — a
+developer/operator role, orthogonal to `subscriptions.is_pro`. There's no
+seed admin: promote yourself once via SQL after signing up (see
+`docs/setup-guide.md`).
+
+- `public.is_admin()` — a `SECURITY DEFINER` SQL function reading the
+  caller's own `profiles.is_admin`, used inside RLS policies (avoids RLS
+  recursion on `profiles`).
+- Admins get an `UPDATE` RLS policy on `modules` (`tier`, `is_active`) —
+  the same two levers the DB already enforces (§7.3, §5.2), now toggleable
+  from a client screen instead of a migration.
+- `feature_flags` — a generic `(key, name, description, enabled)` table for
+  kill switches that aren't a whole module, e.g. an AI feature living inside
+  a free module (§7.3's "pro feature inside a free module" row). Readable by
+  any authenticated user (Edge Functions and the client both check it),
+  writable only by admins. Adding a new flag is a migration + seed row, the
+  same shape as adding a module; enforcing it is up to whatever code path
+  it's meant to gate (see `summarize-person-interactions` for the pattern —
+  a plain `FEATURE_DISABLED:`-prefixed error, not `PAYWALL:`, since
+  upgrading wouldn't fix it).
+- The client-side `/admin` screen (gated on `useIsAdmin()`, linked from
+  Profile only for admins) is a UI convenience — the real enforcement is the
+  two RLS policies above, so a non-admin hitting the route directly still
+  can't write anything.
+
+For manual testing, three account states cover the paywall/admin matrix:
+admin (`is_admin = true`, any `is_pro`), free non-admin (`is_admin = false`,
+`is_pro = false`), and pro non-admin (`is_admin = false`, `is_pro = true`).
+See `docs/setup-guide.md` for how to stand these up without a real RevenueCat
+purchase.
+
 ---
 
 ## 8. Cross-module side-effects (event bus)
@@ -462,6 +494,8 @@ swipe-to-remove, categories) · Integrations / Connected accounts · Paywall · 
 - Paywall limits enforced in the DB, not just the UI.
 - Polymorphic `links` integrity via app-layer type registry + delete-cleanup triggers.
 - Input validation with `zod` on the client and check constraints / triggers on the DB.
+- Admin-only writes (`modules`, `feature_flags`) gated by an RLS policy calling
+  `public.is_admin()` (§7.4) — never trust a client-side `isAdmin` check alone.
 
 ---
 

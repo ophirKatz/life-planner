@@ -9,7 +9,7 @@ order you'd realistically do it — each section unblocks the next.
 
 - [ ] Create a project at [supabase.com](https://supabase.com) (or reuse one).
 - [ ] `supabase link --project-ref <ref>` then `supabase db push` — applies
-      all 22 migrations in order.
+      all 23 migrations in order.
 - [ ] `EXPO_PUBLIC_SUPABASE_PROJECT_ID=<ref> npm run db:types` — regenerates
       `src/core/db/types.ts` from the real schema. (Everything I hand-edited
       into that file this session should match, but this is the source of
@@ -115,6 +115,37 @@ starts requiring it or you adopt their "Enhanced Security" push feature.
 
 Nothing to do — `fetch-weather` / `search-weather-location` proxy
 [Open-Meteo](https://open-meteo.com), which is free and keyless.
+
+## 6a. Admin dashboard + test accounts
+
+- [ ] **Bootstrap yourself as admin.** Sign in once with the account you want
+      as admin, then in the Supabase SQL editor:
+      ```sql
+      update public.profiles set is_admin = true
+      where id = (select id from auth.users where email = 'you@example.com');
+      ```
+      This unlocks the "Admin dashboard" entry on the Profile tab — a module
+      is_active/tier toggle list and the `feature_flags` kill switches
+      (DESIGN.md §7.4). There's no seed admin; this SQL step is the only way
+      in.
+- [ ] **Create the other two test accounts** (sign in with two more Google
+      accounts, or however your auth setup allows multiple identities):
+      - **Free, non-admin** — no setup needed, this is the default state for
+        any new sign-up.
+      - **Pro, non-admin** — either complete a real RevenueCat sandbox
+        purchase on that account, or, faster for UI testing, set it directly:
+        ```sql
+        update public.subscriptions set is_pro = true
+        where user_id = (select id from auth.users where email = 'pro-test@example.com');
+        ```
+        This bypasses RevenueCat entirely — fine for exercising pro-gated UI,
+        but it doesn't validate the real purchase → webhook → entitlement
+        path. Test that path for real at least once before shipping billing
+        changes.
+
+**Decision — who else gets `is_admin`.** There's no invite flow or admin list
+UI yet; granting/revoking is a one-line SQL update. Fine for a single-operator
+app; revisit if you ever have more than one admin.
 
 ## 7. Client env file
 

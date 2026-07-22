@@ -1,7 +1,8 @@
 import { useRouter } from "expo-router";
-import { Link2, Moon, Sun, SunMoon } from "lucide-react-native";
+import { Link2, Moon, ShieldCheck, Sun, SunMoon } from "lucide-react-native";
 import { Text, View } from "react-native";
 
+import { useIsAdmin } from "@/core/admin/useIsAdmin";
 import { useSession } from "@/core/auth/session";
 import { Button } from "@/core/ui/Button";
 import { Card } from "@/core/ui/Card";
@@ -19,6 +20,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { session, signOut } = useSession();
   const { active, setPreference } = useTheme();
+  const { data: isAdmin } = useIsAdmin();
 
   return (
     <View className="flex-1 bg-bg px-6 pt-20 gap-6">
@@ -57,6 +59,16 @@ export default function ProfileScreen() {
         showChevron
         onPress={() => router.push("/integrations")}
       />
+
+      {isAdmin ? (
+        <ListItem
+          title="Admin dashboard"
+          subtitle="Module and feature flag controls"
+          icon={ShieldCheck}
+          showChevron
+          onPress={() => router.push("/admin")}
+        />
+      ) : null}
 
       <Button label="Sign out" variant="secondary" onPress={signOut} className="mt-auto mb-10" />
     </View>
